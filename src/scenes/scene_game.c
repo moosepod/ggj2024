@@ -10,12 +10,14 @@
 #define SPEECH_BUBBLE_LEN 50
 #define AFTER_HECKLE_WAIT_S 2.0
 #define AFTER_THROW_WAIT_S 2.0
+#define SCREEN_BOUNDS                                                          \
+  (MLIBRect) { 0, 0, 400, 240 }
 
 typedef enum {
   STATE_WAIT_TO_HECKLE,
   STATE_HECKLE,
   STATE_WAIT_TO_THROW,
-  STATE_THROW
+  STATE_THROWING
 } GameState;
 
 typedef struct {
@@ -30,6 +32,12 @@ typedef struct {
 } Player;
 
 typedef struct {
+  MLIBFPoint location;
+  MLIBFPoint velocity;
+  bool active;
+} Tomato;
+
+typedef struct {
   char line1[SPEECH_BUBBLE_LEN];
   MLIBSize size;
   bool flipped;
@@ -39,6 +47,7 @@ typedef struct {
   Player player;
   SpeechBubble speech_bubble;
   AudienceMember audience[AUDIENCE_MEMBER_COUNT];
+  Tomato tomato;
   int audience_index;
   char *heckles[HECKLE_COUNT];
   int heckle_index;
@@ -54,9 +63,19 @@ static void init_audience(PlaydateAPI *pd, GameSceneContext *gsc,
                           GameAssets *assets);
 static void init_speech_bubble(PlaydateAPI *pd, GameSceneContext *gsc,
                                GameAssets *assets);
+static void init_misc(PlaydateAPI *pd, GameSceneContext *gsc,
+                      GameAssets *assets);
 static void show_speech(GameContext *game, GameAssets *assets, MLIBPoint p,
                         char *text, bool flipped);
 static void hide_speech(GameContext *game, GameAssets *assets);
+static void update_state(GameContext *game, GameAssets *assets);
+static void update_tomato(GameContext *game, GameAssets *assets);
+static void handle_movement(PlaydateAPI *pd, GameSceneContext *gsc,
+                            PDButtons debounced_buttons, GameAssets *assets);
+
+static void throw_tomato(GameContext *game, GameAssets *assets, MLIBPoint start,
+                         MLIBPoint end, int steps);
+static void hide_tomato(GameContext *game, GameAssets *assets);
 
 // Initializes the scene. Do not change the function name/signature.
 void init_game(GameContext *game, GameAssets *assets) {
@@ -82,39 +101,10 @@ GameScene tick_game(GameContext *game, GameAssets *assets,
                     PDButtons debounced_buttons, int delta) {
   PlaydateAPI *pd = game->pd;
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
-  if ((debounced_buttons & kButtonLeft)) {
-    move_player(game->pd, &gsc->player, assets, -1 * gsc->player.velocity);
-  } else if ((debounced_buttons & kButtonRight)) {
-    move_player(game->pd, &gsc->player, assets, gsc->player.velocity);
-  }
 
-  switch (gsc->state) {
-  case STATE_WAIT_TO_HECKLE:
-    if (pd->system->getElapsedTime() > gsc->change_state_time) {
-      show_speech(game, assets, gsc->audience[gsc->audience_index].location,
-                  gsc->heckles[gsc->heckle_index],
-                  !gsc->audience[gsc->audience_index].right);
-      gsc->audience_index = MLIB_CLAMP_TO_RANGE_MOD(gsc->audience_index + 1, 0,
-                                                    AUDIENCE_MEMBER_COUNT - 1);
-      gsc->heckle_index =
-          MLIB_CLAMP_TO_RANGE_MOD(gsc->heckle_index + 1, 0, HECKLE_COUNT - 1);
-
-      gsc->change_state_time = AFTER_HECKLE_WAIT_S;
-      gsc->state = STATE_WAIT_TO_THROW;
-      pd->system->resetElapsedTime();
-    };
-    break;
-  case STATE_WAIT_TO_THROW:
-    if (pd->system->getElapsedTime() > gsc->change_state_time) {
-      gsc->change_state_time = AFTER_THROW_WAIT_S;
-      pd->system->resetElapsedTime();
-      hide_speech(game, assets);
-      gsc->state = STATE_WAIT_TO_HECKLE;
-    }
-    break;
-  default:
-    break;
-  }
+  handle_movement(pd, gsc, debounced_buttons, assets);
+  update_tomato(game, assets);
+  update_state(game, assets);
 
   return NO_SCENE;
 }
@@ -151,6 +141,11 @@ static void init_player(PlaydateAPI *pd, GameSceneContext *gsc,
 
   pd->graphics->getBitmapData(assets->bird_image, &gsc->player.size.width,
                               &gsc->player.size.height, NULL, NULL, NULL);
+}
+
+static void init_misc(PlaydateAPI *pd, GameSceneContext *gsc,
+                      GameAssets *assets) {
+  gsc->tomato.active = false;
 }
 
 static void init_speech_bubble(PlaydateAPI *pd, GameSceneContext *gsc,
@@ -229,4 +224,89 @@ static void show_speech(GameContext *game, GameAssets *assets, MLIBPoint p,
 static void hide_speech(GameContext *game, GameAssets *assets) {
   PlaydateAPI *pd = game->pd;
   pd->sprite->setVisible(assets->speech_bubble_sprite, false);
+}
+
+static void handle_movement(PlaydateAPI *pd, GameSceneContext *gsc,
+                            PDButtons debounced_buttons, GameAssets *assets) {
+  if ((debounced_buttons & kButtonLeft)) {
+    move_player(pd, &gsc->player, assets, -1 * gsc->player.velocity);
+  } else if ((debounced_buttons & kButtonRight)) {
+    move_player(pd, &gsc->player, assets, gsc->player.velocity);
+  }
+}
+
+static void update_tomato(GameContext *game, GameAssets *assets) {
+  PlaydateAPI *pd = game->pd;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
+  if (gsc->tomato.active) {
+    gsc->tomato.location.x += gsc->tomato.velocity.x;
+    gsc->tomato.location.y += gsc->tomato.velocity.y;
+
+    if (MLIB_POINT_IN_RECT(
+            MLIBPOINT_CREATE(gsc->tomato.location.x, gsc->tomato.location.y),
+            SCREEN_BOUNDS)) {
+      pd->sprite->moveTo(assets->tomato_sprite, (int)gsc->tomato.location.x,
+                         (int)gsc->tomato.location.y);
+    } else {
+      gsc->change_state_time = AFTER_THROW_WAIT_S;
+      gsc->state = STATE_WAIT_TO_HECKLE;
+      pd->system->resetElapsedTime();
+      hide_tomato(game, assets);
+    }
+  }
+}
+static void update_state(GameContext *game, GameAssets *assets) {
+  PlaydateAPI *pd = game->pd;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
+
+  switch (gsc->state) {
+  case STATE_WAIT_TO_HECKLE:
+    hide_tomato(game, assets);
+    if (pd->system->getElapsedTime() > gsc->change_state_time) {
+      gsc->audience_index = MLIB_CLAMP_TO_RANGE_MOD(gsc->audience_index + 1, 0,
+                                                    AUDIENCE_MEMBER_COUNT - 1);
+      gsc->heckle_index =
+          MLIB_CLAMP_TO_RANGE_MOD(gsc->heckle_index + 1, 0, HECKLE_COUNT - 1);
+
+      show_speech(game, assets, gsc->audience[gsc->audience_index].location,
+                  gsc->heckles[gsc->heckle_index],
+                  !gsc->audience[gsc->audience_index].right);
+
+      gsc->change_state_time = AFTER_HECKLE_WAIT_S;
+      gsc->state = STATE_WAIT_TO_THROW;
+      pd->system->resetElapsedTime();
+    };
+    break;
+  case STATE_WAIT_TO_THROW:
+    if (pd->system->getElapsedTime() > gsc->change_state_time) {
+      hide_speech(game, assets);
+
+      throw_tomato(game, assets, gsc->audience[gsc->audience_index].location,
+                   gsc->player.location, 20);
+    }
+    break;
+  default:
+    break;
+  }
+}
+
+static void throw_tomato(GameContext *game, GameAssets *assets, MLIBPoint start,
+                         MLIBPoint end, int steps) {
+  PlaydateAPI *pd = game->pd;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
+
+  gsc->tomato.active = true;
+  gsc->tomato.location = MLIBFPOINT_CREATE(start.x, start.y);
+  gsc->tomato.velocity =
+      MLIBFPOINT_CREATE((end.x - start.x) / steps, (end.y - start.y) / steps);
+  pd->sprite->moveTo(assets->tomato_sprite, start.x, start.y);
+  pd->sprite->setVisible(assets->tomato_sprite, true);
+
+  gsc->state = STATE_THROWING;
+}
+static void hide_tomato(GameContext *game, GameAssets *assets) {
+  PlaydateAPI *pd = game->pd;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
+  gsc->tomato.active = false;
+  pd->sprite->setVisible(assets->tomato_sprite, false);
 }

@@ -68,6 +68,18 @@
           "visible": true,
           "zindex": 3
           },
+	  {
+          "image": {
+            "path": "assets/tomato.png"
+          },  
+          "name": "tomato",
+          "position": {
+            "x": 50,
+            "y": 50
+          },
+          "visible": false,
+          "zindex": 4
+          },
 	  {"name": "speech_bubble",
 	  "position": {"x": 200,"y": 120},
 	  "image": {"size": {"width": 144, "height": 55},

@@ -83,6 +83,27 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->audience_sprite, false);
 
+  assets->tomato_image = pd->graphics->loadBitmap("assets/tomato.png", &outerr);
+  if (outerr) {
+    pdlogger_error("init_game_game: error loading image tomato. %s", outerr);
+  }
+
+  if (!assets->tomato_image) {
+    pdlogger_error("init_game_game: image tomato loaded as null.");
+  }
+
+  assets->tomato_sprite = pd->sprite->newSprite();
+
+  pd->sprite->setImage(assets->tomato_sprite, assets->tomato_image,
+                       kBitmapUnflipped);
+  pd->sprite->setZIndex(assets->tomato_sprite, 4);
+
+  pd->sprite->moveTo(assets->tomato_sprite, 50, 50);
+  pd->sprite->addSprite(assets->tomato_sprite);
+  // Sprite are always invisible when created in init. They will be
+  // made visible during the scene enter/exit code
+  pd->sprite->setVisible(assets->tomato_sprite, false);
+
   assets->speech_bubble_image = pd->graphics->newBitmap(144, 55, kColorWhite);
 
   if (!assets->speech_bubble_image) {
@@ -130,6 +151,9 @@ static void lifecycle_exit_game(GameContext *game, GameAssets *assets) {
 
   pd->sprite->setVisible(assets->audience_sprite, false);
   pdlogger_info("lifecycle.c: .... hiding sprite 'audience_sprite'");
+
+  pd->sprite->setVisible(assets->tomato_sprite, false);
+  pdlogger_info("lifecycle.c: .... hiding sprite 'tomato_sprite'");
 
   pd->sprite->setVisible(assets->speech_bubble_sprite, false);
   pdlogger_info("lifecycle.c: .... hiding sprite 'speech_bubble_sprite'");
