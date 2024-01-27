@@ -11,7 +11,7 @@
 - [X] Move sprite with d-pad. Check bounds
 
 * First round  of work
-- [ ] Shrink hitbox
+- [X] Shrink hitbox
 - [X] Store target when text opens
 - [X] Fix offsets for tomato launch  
 - [ ] Fix speed

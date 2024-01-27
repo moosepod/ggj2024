@@ -30,6 +30,7 @@ typedef struct {
 typedef struct {
   MLIBSize size;
   MLIBPoint location;
+  MLIBRect hitbox;
   int velocity;
 } Player;
 
@@ -81,6 +82,10 @@ static void throw_tomato(GameContext *game, GameAssets *assets, MLIBPoint start,
 static void hide_tomato(GameContext *game, GameAssets *assets);
 static void kill_player(GameContext *game, GameAssets *assets);
 static void reset_game(GameContext *game, GameAssets *assets);
+
+static int rand_int_range(int min, int max) {
+  return (rand() % (max - min)) + min;
+}
 
 // Initializes the scene. Do not change the function name/signature.
 void init_game(GameContext *game, GameAssets *assets) {
@@ -148,12 +153,16 @@ static void init_player(PlaydateAPI *pd, GameSceneContext *gsc,
   gsc->player.location.x = x;
   gsc->player.location.y = y;
 
+  gsc->player.hitbox = MLIBRECT_CREATE(16, 16, 80, 50);
+
   pd->graphics->getBitmapData(assets->bird_image, &gsc->player.size.width,
                               &gsc->player.size.height, NULL, NULL, NULL);
 }
 
 static void init_misc(PlaydateAPI *pd, GameSceneContext *gsc,
                       GameAssets *assets) {
+  srand(pd->system->getCurrentTimeMilliseconds());
+
   gsc->tomato.active = false;
 
   int width, height;
@@ -264,8 +273,10 @@ static void update_tomato(GameContext *game, GameAssets *assets) {
         MLIBPOINT_CREATE(gsc->tomato.location.x, gsc->tomato.location.y);
     PDRect bounds = pd->sprite->getBounds(assets->bird_sprite);
 
-    if (MLIB_POINT_IN_RECT(p, MLIBRECT_CREATE(bounds.x, bounds.y, bounds.width,
-                                              bounds.height))) {
+    if (MLIB_POINT_IN_RECT(p, MLIBRECT_CREATE(bounds.x + gsc->player.hitbox.x,
+                                              bounds.y + gsc->player.hitbox.y,
+                                              gsc->player.hitbox.width,
+                                              gsc->player.hitbox.height))) {
       pdlogger_info("KILLED PLAYER at %dx%d", gsc->player.location.x,
                     gsc->player.location.y);
       hide_tomato(game, assets);
@@ -290,10 +301,8 @@ static void update_state(GameContext *game, GameAssets *assets) {
   case STATE_WAIT_TO_HECKLE:
     hide_tomato(game, assets);
     if (pd->system->getElapsedTime() > gsc->change_state_time) {
-      gsc->audience_index = MLIB_CLAMP_TO_RANGE_MOD(gsc->audience_index + 1, 0,
-                                                    AUDIENCE_MEMBER_COUNT - 1);
-      gsc->heckle_index =
-          MLIB_CLAMP_TO_RANGE_MOD(gsc->heckle_index + 1, 0, HECKLE_COUNT - 1);
+      gsc->audience_index = rand_int_range(0, AUDIENCE_MEMBER_COUNT - 1);
+      gsc->heckle_index = rand_int_range(0, HECKLE_COUNT - 1);
 
       show_speech(game, assets,
                   gsc->audience[gsc->audience_index].speech_location,
