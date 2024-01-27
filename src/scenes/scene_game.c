@@ -3,13 +3,20 @@
 
 #define DEFAULT_BIRD_VELOCITY 5
 #define DEBOUNCER_DELAY 5
+#define SCREEN_WIDTH 400
 
 typedef struct {
-  MLIBSize bird_size;
-  int bird_velocity;
+  MLIBSize size;
+  MLIBPoint location;
+  int velocity;
+} Player;
+
+typedef struct {
+  Player player;
 } GameSceneContext;
 
-static void move_bird(PlaydateAPI *pd, GameAssets *assets, int x);
+static void move_player(PlaydateAPI *pd, Player *player, GameAssets *assets,
+                        int x);
 
 // Initializes the scene. Do not change the function name/signature.
 void init_game(GameContext *game, GameAssets *assets) {
@@ -19,10 +26,15 @@ void init_game(GameContext *game, GameAssets *assets) {
 
   GameSceneContext *gsc = pd->system->realloc(NULL, sizeof(GameSceneContext));
   game->game_userdata = gsc;
-  gsc->bird_velocity = DEFAULT_BIRD_VELOCITY;
+  gsc->player.velocity = DEFAULT_BIRD_VELOCITY;
 
-  pd->graphics->getBitmapData(assets->bird_image, &gsc->bird_size.width,
-                              &gsc->bird_size.height, NULL, NULL, NULL);
+  float x, y;
+  pd->sprite->getPosition(assets->bird_sprite, &x, &y);
+  gsc->player.location.x = x;
+  gsc->player.location.y = y;
+
+  pd->graphics->getBitmapData(assets->bird_image, &gsc->player.size.width,
+                              &gsc->player.size.height, NULL, NULL, NULL);
 }
 
 // Run once every game loop when scene is active. Do not change the function
@@ -33,9 +45,9 @@ GameScene tick_game(GameContext *game, GameAssets *assets,
 
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
   if ((debounced_buttons & kButtonLeft)) {
-    move_bird(game->pd, assets, -1 * gsc->bird_velocity);
+    move_player(game->pd, &gsc->player, assets, -1 * gsc->player.velocity);
   } else if ((debounced_buttons & kButtonRight)) {
-    move_bird(game->pd, assets, gsc->bird_velocity);
+    move_player(game->pd, &gsc->player, assets, gsc->player.velocity);
   }
 
   return NO_SCENE;
@@ -52,6 +64,11 @@ void unpause_game(GameContext *game, GameAssets *assets) {}
 //
 // Main function
 //
-static void move_bird(PlaydateAPI *pd, GameAssets *assets, int x) {
-  pd->sprite->moveBy(assets->bird_sprite, x, 0);
+static void move_player(PlaydateAPI *pd, Player *player, GameAssets *assets,
+                        int x) {
+  player->location.x =
+      MLIB_CLAMP_TO_RANGE(player->location.x + x, player->size.width / 2,
+                          SCREEN_WIDTH - player->size.width / 2);
+  pd->sprite->moveTo(assets->bird_sprite, player->location.x,
+                     player->location.y);
 }

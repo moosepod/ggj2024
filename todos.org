@@ -7,8 +7,8 @@
   
 * Prototype - loop
 
-- [ ] Create progammer sprites for character, tomato, stage
-- [ ] Move sprite with d-pad. Check bounds
+- [X] Create progammer sprites for character, tomato, stage
+- [X] Move sprite with d-pad. Check bounds
 - [ ] Figure out use of crank with d-pad
 - [ ] Show jokes over heads of users
 - [ ] Throw tomatoes from users
