@@ -17,6 +17,13 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
                    outerr);
   }
 
+  assets->joke_bubble_base_image =
+      pd->graphics->loadBitmap("assets/large_speech_bubble.png", &outerr);
+  if (outerr) {
+    pdlogger_error("init_game_game: error loading image joke_bubble_base. %s",
+                   outerr);
+  }
+
   assets->background_image =
       pd->graphics->loadBitmap("assets/background2.png", &outerr);
   if (outerr) {
@@ -96,7 +103,7 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
 
   pd->sprite->setImage(assets->tomato_sprite, assets->tomato_image,
                        kBitmapUnflipped);
-  pd->sprite->setZIndex(assets->tomato_sprite, 4);
+  pd->sprite->setZIndex(assets->tomato_sprite, 5);
 
   pd->sprite->moveTo(assets->tomato_sprite, 50, 50);
   pd->sprite->addSprite(assets->tomato_sprite);
@@ -121,6 +128,24 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // Sprite are always invisible when created in init. They will be
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->speech_bubble_sprite, false);
+
+  assets->joke_bubble_image = pd->graphics->newBitmap(384, 38, kColorWhite);
+
+  if (!assets->joke_bubble_image) {
+    pdlogger_error("init_game_game: image joke_bubble loaded as null.");
+  }
+
+  assets->joke_bubble_sprite = pd->sprite->newSprite();
+
+  pd->sprite->setImage(assets->joke_bubble_sprite, assets->joke_bubble_image,
+                       kBitmapUnflipped);
+  pd->sprite->setZIndex(assets->joke_bubble_sprite, 2);
+
+  pd->sprite->moveTo(assets->joke_bubble_sprite, 198, 30);
+  pd->sprite->addSprite(assets->joke_bubble_sprite);
+  // Sprite are always invisible when created in init. They will be
+  // made visible during the scene enter/exit code
+  pd->sprite->setVisible(assets->joke_bubble_sprite, false);
 }
 
 static void lifecycle_enter_game(GameContext *game, GameAssets *assets) {
@@ -157,6 +182,9 @@ static void lifecycle_exit_game(GameContext *game, GameAssets *assets) {
 
   pd->sprite->setVisible(assets->speech_bubble_sprite, false);
   pdlogger_info("lifecycle.c: .... hiding sprite 'speech_bubble_sprite'");
+
+  pd->sprite->setVisible(assets->joke_bubble_sprite, false);
+  pdlogger_info("lifecycle.c: .... hiding sprite 'joke_bubble_sprite'");
 
   exit_game(game, assets);
 }

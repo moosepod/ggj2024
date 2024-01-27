@@ -28,7 +28,12 @@
       "menus": [],
 	"name": "game",
 	"standalone_images": [{"name":"speech_bubble_base","image":{
-	"path": "assets/speech_bubble.png"}}
+	    "path": "assets/speech_bubble.png"}},{
+			      "image": {
+            "path": "assets/large_speech_bubble.png"
+          },  
+			      "name": "joke_bubble_base"}
+
       ], 
 
       "sprites": [
@@ -78,7 +83,7 @@
             "y": 50
           },
           "visible": false,
-          "zindex": 4
+          "zindex": 5
           },
 	  {"name": "speech_bubble",
 	  "position": {"x": 200,"y": 120},
@@ -86,7 +91,18 @@
 	    "background": "white"},
 	  "visible": false,
 	  "zindex": 4
-	}
+	  },
+	  {
+          "name": "joke_bubble",
+          "position": {
+            "x": 198,
+            "y": 30
+          },
+	  "image": {"size": {"width": 384, "height": 38},
+	    "background": "white"},
+	  "visible": false,
+	  "zindex": 2
+      }
        ]
     }
   ]

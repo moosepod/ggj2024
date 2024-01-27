@@ -22,7 +22,12 @@ typedef struct {
   LCDBitmap *speech_bubble_image;
   LCDSprite *speech_bubble_sprite;
 
+  LCDBitmap *joke_bubble_image;
+  LCDSprite *joke_bubble_sprite;
+
   LCDBitmap *speech_bubble_base_image;
+
+  LCDBitmap *joke_bubble_base_image;
 
 } GameAssets;
 

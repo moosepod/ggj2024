@@ -14,8 +14,12 @@
 - [X] Shrink hitbox
 - [X] Store target when text opens
 - [X] Fix offsets for tomato launch  
-- [ ] Fix speed
-- [ ] Randomize
+- [X] Fix speed
+- [X] Randomize
+- [ ] Add a speech bubble triangle
+- [ ] Can't move while telling joke
+- [ ] Fix speed of projectile
+- [ ] Add hook
   
 * Other stuff
 - [ ] Finalize image (get rid of bird 2, etc)
@@ -27,7 +31,9 @@
 - [ ] Add a count-up timer
 - [ ] Add a get ready/win/loss state
 - [ ] Tomato "splat" on back
-  
+- [ ] Remove FPS
+- [ ] Test voice sample
+    
 * Prototype - hook
 - [ ] Hook comes in from side of stage at different speeds. With "get off the stage" bubble
 - [ ] Hook comes in from side of stage at different speeds
