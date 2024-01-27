@@ -636,7 +636,7 @@ LOAD /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp
 LOAD /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a
 END GROUP
 
-.text           0x0000000000000000     0x3645
+.text           0x0000000000000000     0x378f
  *(.text)
  .text          0x0000000000000000      0x378 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_addsubdf3.o)
                 0x0000000000000000                __aeabi_drsub
@@ -765,24 +765,24 @@ END GROUP
                 0x0000000000002790       0x5c build/src/scenes/scene_game.o
  *fill*         0x00000000000027ec        0x4 
  .text.init_game
-                0x00000000000027f0      0x114 build/src/scenes/scene_game.o
+                0x00000000000027f0      0x164 build/src/scenes/scene_game.o
                 0x00000000000027f0                init_game
- *fill*         0x0000000000002904        0xc 
+ *fill*         0x0000000000002954        0xc 
  .text.tick_game
-                0x0000000000002910      0x32c build/src/scenes/scene_game.o
-                0x0000000000002910                tick_game
- *fill*         0x0000000000002c3c        0x4 
+                0x0000000000002960      0x40c build/src/scenes/scene_game.o
+                0x0000000000002960                tick_game
+ *fill*         0x0000000000002d6c        0x4 
  .text.enter_game
-                0x0000000000002c40        0x4 build/src/scenes/scene_game.o
-                0x0000000000002c40                enter_game
- *fill*         0x0000000000002c44        0xc 
+                0x0000000000002d70        0x4 build/src/scenes/scene_game.o
+                0x0000000000002d70                enter_game
+ *fill*         0x0000000000002d74        0xc 
  .text.exit_game
-                0x0000000000002c50        0x4 build/src/scenes/scene_game.o
-                0x0000000000002c50                exit_game
- *fill*         0x0000000000002c54        0xc 
+                0x0000000000002d80        0x4 build/src/scenes/scene_game.o
+                0x0000000000002d80                exit_game
+ *fill*         0x0000000000002d84        0xc 
  .text.eventHandlerShim
-                0x0000000000002c60       0x1c build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
-                0x0000000000002c60                eventHandlerShim
+                0x0000000000002d90       0x1c build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
+                0x0000000000002d90                eventHandlerShim
  *(.init)
  *(.fini)
  *crtbegin.o(.ctors)
@@ -797,140 +797,143 @@ END GROUP
  *(.dtors)
  *(.rodata*)
  .rodata.update.str1.4
-                0x0000000000002c7c       0x23 build/src/pdantler/main.o
- *fill*         0x0000000000002c9f        0x1 
+                0x0000000000002dac       0x23 build/src/pdantler/main.o
+ *fill*         0x0000000000002dcf        0x1 
  .rodata.eventHandler.str1.4
-                0x0000000000002ca0       0x4b build/src/pdantler/main.o
- *fill*         0x0000000000002ceb        0x1 
+                0x0000000000002dd0       0x4b build/src/pdantler/main.o
+ *fill*         0x0000000000002e1b        0x1 
  .rodata.lifecycle_exit_game.str1.4
-                0x0000000000002cec      0x123 build/src/pdantler/lifecycle.o
- *fill*         0x0000000000002e0f        0x1 
+                0x0000000000002e1c      0x123 build/src/pdantler/lifecycle.o
+ *fill*         0x0000000000002f3f        0x1 
  .rodata.lifecycle_enter_game.str1.4
-                0x0000000000002e10       0xbf build/src/pdantler/lifecycle.o
- *fill*         0x0000000000002ecf        0x1 
+                0x0000000000002f40       0xbf build/src/pdantler/lifecycle.o
+ *fill*         0x0000000000002fff        0x1 
  .rodata.pdantler_switch_to_scene.str1.4
-                0x0000000000002ed0       0xa0 build/src/pdantler/lifecycle.o
+                0x0000000000003000       0xa0 build/src/pdantler/lifecycle.o
  .rodata.lifecycle_init_game.str1.4
-                0x0000000000002f70      0x2e8 build/src/pdantler/lifecycle.o
- .rodata        0x0000000000003258      0x320 build/src/pdantler/pdlogger.o
+                0x00000000000030a0      0x2e8 build/src/pdantler/lifecycle.o
+ .rodata        0x0000000000003388      0x320 build/src/pdantler/pdlogger.o
  .rodata._ftoa.str1.4
-                0x0000000000003578       0x15 build/src/pdantler/printf.o
- *fill*         0x000000000000358d        0x3 
+                0x00000000000036a8       0x15 build/src/pdantler/printf.o
+ *fill*         0x00000000000036bd        0x3 
  .rodata.pow10.0
-                0x0000000000003590       0x50 build/src/pdantler/printf.o
+                0x00000000000036c0       0x50 build/src/pdantler/printf.o
  .rodata.init_game.str1.4
-                0x00000000000035e0       0x65 build/src/scenes/scene_game.o
+                0x0000000000003710       0x65 build/src/scenes/scene_game.o
+ *fill*         0x0000000000003775        0x3 
+ .rodata.tick_game.str1.4
+                0x0000000000003778       0x17 build/src/scenes/scene_game.o
  *(.eh_frame*)
 
-.glue_7         0x0000000000003648        0x0
- .glue_7        0x0000000000003648        0x0 linker stubs
+.glue_7         0x0000000000003790        0x0
+ .glue_7        0x0000000000003790        0x0 linker stubs
 
-.glue_7t        0x0000000000003648        0x0
- .glue_7t       0x0000000000003648        0x0 linker stubs
+.glue_7t        0x0000000000003790        0x0
+ .glue_7t       0x0000000000003790        0x0 linker stubs
 
-.vfp11_veneer   0x0000000000003648        0x0
- .vfp11_veneer  0x0000000000003648        0x0 linker stubs
+.vfp11_veneer   0x0000000000003790        0x0
+ .vfp11_veneer  0x0000000000003790        0x0 linker stubs
 
-.v4_bx          0x0000000000003648        0x0
- .v4_bx         0x0000000000003648        0x0 linker stubs
+.v4_bx          0x0000000000003790        0x0
+ .v4_bx         0x0000000000003790        0x0 linker stubs
 
-.iplt           0x0000000000003648        0x0
- .iplt          0x0000000000003648        0x0 build/src/pdantler/main.o
+.iplt           0x0000000000003790        0x0
+ .iplt          0x0000000000003790        0x0 build/src/pdantler/main.o
 
-.rel.dyn        0x0000000000003648        0x0
- .rel.iplt      0x0000000000003648        0x0 build/src/pdantler/main.o
+.rel.dyn        0x0000000000003790        0x0
+ .rel.iplt      0x0000000000003790        0x0 build/src/pdantler/main.o
 
-.data           0x0000000000003645        0x3
-                0x0000000000003645                __etext = .
-                0x0000000000003645                __data_start__ = .
+.data           0x000000000000378f        0x1
+                0x000000000000378f                __etext = .
+                0x000000000000378f                __data_start__ = .
  *(vtable)
  *(.data*)
-                0x0000000000003648                . = ALIGN (0x4)
- *fill*         0x0000000000003645        0x3 
+                0x0000000000003790                . = ALIGN (0x4)
+ *fill*         0x000000000000378f        0x1 
                 [!provide]                        PROVIDE (__preinit_array_start = .)
  *(.preinit_array)
                 [!provide]                        PROVIDE (__preinit_array_end = .)
-                0x0000000000003648                . = ALIGN (0x4)
+                0x0000000000003790                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array)
                 [!provide]                        PROVIDE (__init_array_end = .)
-                0x0000000000003648                . = ALIGN (0x4)
+                0x0000000000003790                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array)
                 [!provide]                        PROVIDE (__fini_array_end = .)
-                0x0000000000003648                . = ALIGN (0x4)
-                0x0000000000003648                __data_end__ = .
+                0x0000000000003790                . = ALIGN (0x4)
+                0x0000000000003790                __data_end__ = .
 
-.igot.plt       0x0000000000003648        0x0
- .igot.plt      0x0000000000003648        0x0 build/src/pdantler/main.o
+.igot.plt       0x0000000000003790        0x0
+ .igot.plt      0x0000000000003790        0x0 build/src/pdantler/main.o
 
-.bss            0x0000000000003648        0xc
-                0x0000000000003648                . = ALIGN (0x4)
-                0x0000000000003648                __bss_start__ = .
+.bss            0x0000000000003790        0xc
+                0x0000000000003790                . = ALIGN (0x4)
+                0x0000000000003790                __bss_start__ = .
  *(.bss*)
- .bss.logger    0x0000000000003648        0x8 build/src/pdantler/pdlogger.o
+ .bss.logger    0x0000000000003790        0x8 build/src/pdantler/pdlogger.o
  .bss.pdrealloc
-                0x0000000000003650        0x4 build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
+                0x0000000000003798        0x4 build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
  *(COMMON)
  *(COM)
-                0x0000000000003654                . = ALIGN (0x4)
-                0x0000000000003654                __bss_end__ = .
+                0x000000000000379c                . = ALIGN (0x4)
+                0x000000000000379c                __bss_end__ = .
 
 /DISCARD/
  *(.ARM.exidx)
 OUTPUT(build/pdex.elf elf32-littlearm)
 LOAD linker stubs
 
-.debug_info     0x0000000000000000    0x21378
+.debug_info     0x0000000000000000    0x216c9
  .debug_info    0x0000000000000000     0x5e1a build/src/pdantler/main.o
  .debug_info    0x0000000000005e1a     0x63f8 build/src/pdantler/lifecycle.o
  .debug_info    0x000000000000c212     0x5c60 build/src/pdantler/utils.o
  .debug_info    0x0000000000011e72      0x2e6 build/src/pdantler/pdlogger.o
  .debug_info    0x0000000000012158     0x1b79 build/src/pdantler/printf.o
- .debug_info    0x0000000000013cd1     0x6a0f build/src/scenes/scene_game.o
- .debug_info    0x000000000001a6e0     0x631a build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
- .debug_info    0x00000000000209fa       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_addsubdf3.o)
- .debug_info    0x0000000000020a20       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_muldivdf3.o)
- .debug_info    0x0000000000020a46       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_cmpdf2.o)
- .debug_info    0x0000000000020a6c       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixdfsi.o)
- .debug_info    0x0000000000020a92       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixunsdfsi.o)
- .debug_info    0x0000000000020ab8       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
- .debug_info    0x0000000000020ade      0x717 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
- .debug_info    0x00000000000211f5       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
- .debug_info    0x000000000002121b      0x137 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-memset.o)
- .debug_info    0x0000000000021352       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-strlen.o)
+ .debug_info    0x0000000000013cd1     0x6d60 build/src/scenes/scene_game.o
+ .debug_info    0x000000000001aa31     0x631a build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
+ .debug_info    0x0000000000020d4b       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_addsubdf3.o)
+ .debug_info    0x0000000000020d71       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_muldivdf3.o)
+ .debug_info    0x0000000000020d97       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_cmpdf2.o)
+ .debug_info    0x0000000000020dbd       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixdfsi.o)
+ .debug_info    0x0000000000020de3       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixunsdfsi.o)
+ .debug_info    0x0000000000020e09       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
+ .debug_info    0x0000000000020e2f      0x717 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_info    0x0000000000021546       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
+ .debug_info    0x000000000002156c      0x137 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-memset.o)
+ .debug_info    0x00000000000216a3       0x26 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-strlen.o)
 
-.debug_abbrev   0x0000000000000000     0x18be
+.debug_abbrev   0x0000000000000000     0x1900
  .debug_abbrev  0x0000000000000000      0x32e build/src/pdantler/main.o
  .debug_abbrev  0x000000000000032e      0x369 build/src/pdantler/lifecycle.o
  .debug_abbrev  0x0000000000000697      0x2e2 build/src/pdantler/utils.o
  .debug_abbrev  0x0000000000000979      0x181 build/src/pdantler/pdlogger.o
  .debug_abbrev  0x0000000000000afa      0x3e7 build/src/pdantler/printf.o
- .debug_abbrev  0x0000000000000ee1      0x444 build/src/scenes/scene_game.o
- .debug_abbrev  0x0000000000001325      0x2e2 build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
- .debug_abbrev  0x0000000000001607       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_addsubdf3.o)
- .debug_abbrev  0x000000000000161b       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_muldivdf3.o)
- .debug_abbrev  0x000000000000162f       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_cmpdf2.o)
- .debug_abbrev  0x0000000000001643       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixdfsi.o)
- .debug_abbrev  0x0000000000001657       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixunsdfsi.o)
- .debug_abbrev  0x000000000000166b       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
- .debug_abbrev  0x000000000000167f      0x163 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
- .debug_abbrev  0x00000000000017e2       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
- .debug_abbrev  0x00000000000017f6       0xb4 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-memset.o)
- .debug_abbrev  0x00000000000018aa       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-strlen.o)
+ .debug_abbrev  0x0000000000000ee1      0x486 build/src/scenes/scene_game.o
+ .debug_abbrev  0x0000000000001367      0x2e2 build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
+ .debug_abbrev  0x0000000000001649       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_addsubdf3.o)
+ .debug_abbrev  0x000000000000165d       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_muldivdf3.o)
+ .debug_abbrev  0x0000000000001671       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_cmpdf2.o)
+ .debug_abbrev  0x0000000000001685       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixdfsi.o)
+ .debug_abbrev  0x0000000000001699       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixunsdfsi.o)
+ .debug_abbrev  0x00000000000016ad       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
+ .debug_abbrev  0x00000000000016c1      0x163 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_abbrev  0x0000000000001824       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
+ .debug_abbrev  0x0000000000001838       0xb4 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-memset.o)
+ .debug_abbrev  0x00000000000018ec       0x14 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-strlen.o)
 
-.debug_loc      0x0000000000000000     0x6527
+.debug_loc      0x0000000000000000     0x6779
  .debug_loc     0x0000000000000000      0x2eb build/src/pdantler/main.o
  .debug_loc     0x00000000000002eb      0x574 build/src/pdantler/lifecycle.o
  .debug_loc     0x000000000000085f      0x571 build/src/pdantler/utils.o
  .debug_loc     0x0000000000000dd0       0xba build/src/pdantler/pdlogger.o
  .debug_loc     0x0000000000000e8a     0x35f6 build/src/pdantler/printf.o
- .debug_loc     0x0000000000004480      0xc50 build/src/scenes/scene_game.o
- .debug_loc     0x00000000000050d0      0x21c build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
- .debug_loc     0x00000000000052ec     0x100f /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
- .debug_loc     0x00000000000062fb      0x22c /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-memset.o)
+ .debug_loc     0x0000000000004480      0xea2 build/src/scenes/scene_game.o
+ .debug_loc     0x0000000000005322      0x21c build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
+ .debug_loc     0x000000000000553e     0x100f /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_loc     0x000000000000654d      0x22c /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-memset.o)
 
 .debug_aranges  0x0000000000000000      0x328
  .debug_aranges
@@ -968,15 +971,15 @@ LOAD linker stubs
  .debug_aranges
                 0x0000000000000308       0x20 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-strlen.o)
 
-.debug_ranges   0x0000000000000000      0x7a8
+.debug_ranges   0x0000000000000000      0x810
  .debug_ranges  0x0000000000000000       0x68 build/src/pdantler/main.o
  .debug_ranges  0x0000000000000068      0x108 build/src/pdantler/lifecycle.o
  .debug_ranges  0x0000000000000170       0x98 build/src/pdantler/utils.o
  .debug_ranges  0x0000000000000208       0x28 build/src/pdantler/pdlogger.o
  .debug_ranges  0x0000000000000230      0x248 build/src/pdantler/printf.o
- .debug_ranges  0x0000000000000478      0x220 build/src/scenes/scene_game.o
- .debug_ranges  0x0000000000000698       0x28 build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
- .debug_ranges  0x00000000000006c0       0xe8 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_ranges  0x0000000000000478      0x288 build/src/scenes/scene_game.o
+ .debug_ranges  0x0000000000000700       0x28 build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
+ .debug_ranges  0x0000000000000728       0xe8 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
 
 .debug_macro    0x0000000000000000     0x2ffc
  .debug_macro   0x0000000000000000      0x2ae build/src/pdantler/main.o
@@ -1038,26 +1041,26 @@ LOAD linker stubs
  .debug_macro   0x0000000000002e14       0x4c build/src/scenes/scene_game.o
  .debug_macro   0x0000000000002e60      0x19c build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
 
-.debug_line     0x0000000000000000     0x4345
+.debug_line     0x0000000000000000     0x44fa
  .debug_line    0x0000000000000000      0x5ae build/src/pdantler/main.o
  .debug_line    0x00000000000005ae      0x8bc build/src/pdantler/lifecycle.o
  .debug_line    0x0000000000000e6a      0x61e build/src/pdantler/utils.o
  .debug_line    0x0000000000001488      0x147 build/src/pdantler/pdlogger.o
  .debug_line    0x00000000000015cf     0x122d build/src/pdantler/printf.o
- .debug_line    0x00000000000027fc      0xa02 build/src/scenes/scene_game.o
- .debug_line    0x00000000000031fe      0x39f build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
- .debug_line    0x000000000000359d      0x186 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_addsubdf3.o)
- .debug_line    0x0000000000003723      0x19b /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_muldivdf3.o)
- .debug_line    0x00000000000038be       0xbd /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_cmpdf2.o)
- .debug_line    0x000000000000397b       0x79 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixdfsi.o)
- .debug_line    0x00000000000039f4       0x75 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixunsdfsi.o)
- .debug_line    0x0000000000003a69       0x60 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
- .debug_line    0x0000000000003ac9      0x5ae /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
- .debug_line    0x0000000000004077       0x60 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
- .debug_line    0x00000000000040d7      0x1bf /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-memset.o)
- .debug_line    0x0000000000004296       0xaf /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-strlen.o)
+ .debug_line    0x00000000000027fc      0xbb7 build/src/scenes/scene_game.o
+ .debug_line    0x00000000000033b3      0x39f build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
+ .debug_line    0x0000000000003752      0x186 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_addsubdf3.o)
+ .debug_line    0x00000000000038d8      0x19b /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_muldivdf3.o)
+ .debug_line    0x0000000000003a73       0xbd /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_cmpdf2.o)
+ .debug_line    0x0000000000003b30       0x79 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixdfsi.o)
+ .debug_line    0x0000000000003ba9       0x75 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixunsdfsi.o)
+ .debug_line    0x0000000000003c1e       0x60 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
+ .debug_line    0x0000000000003c7e      0x5ae /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_line    0x000000000000422c       0x60 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
+ .debug_line    0x000000000000428c      0x1bf /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-memset.o)
+ .debug_line    0x000000000000444b       0xaf /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-strlen.o)
 
-.debug_str      0x0000000000000000     0xc555
+.debug_str      0x0000000000000000     0xc5c2
  .debug_str     0x0000000000000000     0xa9ac build/src/pdantler/main.o
                                        0xaddf (size before relaxing)
  .debug_str     0x000000000000a9ac       0x6f build/src/pdantler/lifecycle.o
@@ -1068,24 +1071,24 @@ LOAD linker stubs
                                        0x32ef (size before relaxing)
  .debug_str     0x000000000000ac77      0x9b1 build/src/pdantler/printf.o
                                        0x47cd (size before relaxing)
- .debug_str     0x000000000000b628      0x301 build/src/scenes/scene_game.o
-                                       0xb0fa (size before relaxing)
- .debug_str     0x000000000000b929      0x42c build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
+ .debug_str     0x000000000000b628      0x36e build/src/scenes/scene_game.o
+                                       0xb17e (size before relaxing)
+ .debug_str     0x000000000000b996      0x42c build//home/mchristensen/src/PlaydateSDK-2.2.0/C_API/buildsupport/setup.o
                                        0x9b71 (size before relaxing)
- .debug_str     0x000000000000bd55       0xab /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_addsubdf3.o)
- .debug_str     0x000000000000be00       0xab /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_muldivdf3.o)
- .debug_str     0x000000000000be00       0xab /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_cmpdf2.o)
- .debug_str     0x000000000000be00       0xab /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixdfsi.o)
- .debug_str     0x000000000000be00       0xab /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixunsdfsi.o)
- .debug_str     0x000000000000be00       0x2c /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
+ .debug_str     0x000000000000bdc2       0xab /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_addsubdf3.o)
+ .debug_str     0x000000000000be6d       0xab /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_muldivdf3.o)
+ .debug_str     0x000000000000be6d       0xab /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_cmpdf2.o)
+ .debug_str     0x000000000000be6d       0xab /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixdfsi.o)
+ .debug_str     0x000000000000be6d       0xab /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_arm_fixunsdfsi.o)
+ .debug_str     0x000000000000be6d       0x2c /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
                                          0xa6 (size before relaxing)
- .debug_str     0x000000000000be2c      0x544 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_str     0x000000000000be99      0x544 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
                                         0x647 (size before relaxing)
- .debug_str     0x000000000000c370       0x30 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
+ .debug_str     0x000000000000c3dd       0x30 /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
                                          0xaa (size before relaxing)
- .debug_str     0x000000000000c3a0      0x111 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-memset.o)
+ .debug_str     0x000000000000c40d      0x111 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-memset.o)
                                         0x1bb (size before relaxing)
- .debug_str     0x000000000000c4b1       0xa4 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-strlen.o)
+ .debug_str     0x000000000000c51e       0xa4 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg.a(lib_a-strlen.o)
                                          0xb0 (size before relaxing)
 
 .comment        0x0000000000000000       0x33
@@ -1252,6 +1255,7 @@ pdlogger_error                                    build/src/pdantler/pdlogger.o
                                                   build/src/pdantler/lifecycle.o
                                                   build/src/pdantler/main.o
 pdlogger_info                                     build/src/pdantler/pdlogger.o
+                                                  build/src/scenes/scene_game.o
                                                   build/src/pdantler/lifecycle.o
                                                   build/src/pdantler/main.o
 pdlogger_register_appender                        build/src/pdantler/pdlogger.o

@@ -17,11 +17,13 @@ typedef enum {
   STATE_WAIT_TO_HECKLE,
   STATE_HECKLE,
   STATE_WAIT_TO_THROW,
-  STATE_THROWING
+  STATE_THROWING,
+  STATE_GAME_OVER
 } GameState;
 
 typedef struct {
-  MLIBPoint location;
+  MLIBPoint speech_location;
+  MLIBPoint throw_location;
   bool right;
 } AudienceMember;
 
@@ -52,6 +54,7 @@ typedef struct {
   char *heckles[HECKLE_COUNT];
   int heckle_index;
   float change_state_time;
+  MLIBPoint player_location_bookmark;
   GameState state;
 } GameSceneContext;
 
@@ -76,6 +79,8 @@ static void handle_movement(PlaydateAPI *pd, GameSceneContext *gsc,
 static void throw_tomato(GameContext *game, GameAssets *assets, MLIBPoint start,
                          MLIBPoint end, int steps);
 static void hide_tomato(GameContext *game, GameAssets *assets);
+static void kill_player(GameContext *game, GameAssets *assets);
+static void reset_game(GameContext *game, GameAssets *assets);
 
 // Initializes the scene. Do not change the function name/signature.
 void init_game(GameContext *game, GameAssets *assets) {
@@ -89,9 +94,7 @@ void init_game(GameContext *game, GameAssets *assets) {
   init_audience(pd, gsc, assets);
   init_speech_bubble(pd, gsc, assets);
 
-  gsc->state = STATE_WAIT_TO_HECKLE;
-  gsc->change_state_time = AFTER_THROW_WAIT_S;
-  pd->system->resetElapsedTime();
+  reset_game(game, assets);
 }
 
 // Run once every game loop when scene is active. Do not change the function
@@ -102,9 +105,15 @@ GameScene tick_game(GameContext *game, GameAssets *assets,
   PlaydateAPI *pd = game->pd;
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
 
-  handle_movement(pd, gsc, debounced_buttons, assets);
-  update_tomato(game, assets);
-  update_state(game, assets);
+  if (gsc->state == STATE_GAME_OVER) {
+    if ((debounced_buttons & kButtonA) || (debounced_buttons & kButtonB)) {
+      reset_game(game, assets);
+    }
+  } else {
+    handle_movement(pd, gsc, debounced_buttons, assets);
+    update_tomato(game, assets);
+    update_state(game, assets);
+  }
 
   return NO_SCENE;
 }
@@ -146,6 +155,10 @@ static void init_player(PlaydateAPI *pd, GameSceneContext *gsc,
 static void init_misc(PlaydateAPI *pd, GameSceneContext *gsc,
                       GameAssets *assets) {
   gsc->tomato.active = false;
+
+  int width, height;
+  pd->graphics->getBitmapData(assets->tomato_image, &width, &height, NULL, NULL,
+                              NULL);
 }
 
 static void init_speech_bubble(PlaydateAPI *pd, GameSceneContext *gsc,
@@ -168,19 +181,24 @@ static void init_speech_bubble(PlaydateAPI *pd, GameSceneContext *gsc,
 static void init_audience(PlaydateAPI *pd, GameSceneContext *gsc,
                           GameAssets *assets) {
 
-  gsc->audience[0].location = MLIBPOINT_CREATE(45, 200);
+  gsc->audience[0].speech_location = MLIBPOINT_CREATE(45, 200);
+  gsc->audience[0].throw_location = MLIBPOINT_CREATE(69, 178);
   gsc->audience[0].right = false;
 
-  gsc->audience[1].location = MLIBPOINT_CREATE(130, 200);
+  gsc->audience[1].speech_location = MLIBPOINT_CREATE(130, 200);
+  gsc->audience[1].throw_location = MLIBPOINT_CREATE(178, 168);
   gsc->audience[1].right = false;
 
-  gsc->audience[2].location = MLIBPOINT_CREATE(200, 200);
+  gsc->audience[2].speech_location = MLIBPOINT_CREATE(200, 200);
+  gsc->audience[2].throw_location = MLIBPOINT_CREATE(199, 187);
   gsc->audience[2].right = false;
 
-  gsc->audience[3].location = MLIBPOINT_CREATE(128, 200);
+  gsc->audience[3].speech_location = MLIBPOINT_CREATE(128, 200);
+  gsc->audience[3].throw_location = MLIBPOINT_CREATE(275, 175);
   gsc->audience[3].right = true;
 
-  gsc->audience[4].location = MLIBPOINT_CREATE(190, 200);
+  gsc->audience[4].speech_location = MLIBPOINT_CREATE(190, 200);
+  gsc->audience[4].throw_location = MLIBPOINT_CREATE(312, 140);
   gsc->audience[4].right = true;
 
   gsc->audience_index = 0;
@@ -242,12 +260,21 @@ static void update_tomato(GameContext *game, GameAssets *assets) {
     gsc->tomato.location.x += gsc->tomato.velocity.x;
     gsc->tomato.location.y += gsc->tomato.velocity.y;
 
-    if (MLIB_POINT_IN_RECT(
-            MLIBPOINT_CREATE(gsc->tomato.location.x, gsc->tomato.location.y),
-            SCREEN_BOUNDS)) {
+    MLIBPoint p =
+        MLIBPOINT_CREATE(gsc->tomato.location.x, gsc->tomato.location.y);
+    PDRect bounds = pd->sprite->getBounds(assets->bird_sprite);
+
+    if (MLIB_POINT_IN_RECT(p, MLIBRECT_CREATE(bounds.x, bounds.y, bounds.width,
+                                              bounds.height))) {
+      pdlogger_info("KILLED PLAYER at %dx%d", gsc->player.location.x,
+                    gsc->player.location.y);
+      hide_tomato(game, assets);
+      kill_player(game, assets);
+    } else if (MLIB_POINT_IN_RECT(p, SCREEN_BOUNDS)) {
       pd->sprite->moveTo(assets->tomato_sprite, (int)gsc->tomato.location.x,
                          (int)gsc->tomato.location.y);
     } else {
+
       gsc->change_state_time = AFTER_THROW_WAIT_S;
       gsc->state = STATE_WAIT_TO_HECKLE;
       pd->system->resetElapsedTime();
@@ -268,21 +295,24 @@ static void update_state(GameContext *game, GameAssets *assets) {
       gsc->heckle_index =
           MLIB_CLAMP_TO_RANGE_MOD(gsc->heckle_index + 1, 0, HECKLE_COUNT - 1);
 
-      show_speech(game, assets, gsc->audience[gsc->audience_index].location,
+      show_speech(game, assets,
+                  gsc->audience[gsc->audience_index].speech_location,
                   gsc->heckles[gsc->heckle_index],
                   !gsc->audience[gsc->audience_index].right);
 
       gsc->change_state_time = AFTER_HECKLE_WAIT_S;
       gsc->state = STATE_WAIT_TO_THROW;
       pd->system->resetElapsedTime();
+      gsc->player_location_bookmark = gsc->player.location;
     };
     break;
   case STATE_WAIT_TO_THROW:
     if (pd->system->getElapsedTime() > gsc->change_state_time) {
       hide_speech(game, assets);
 
-      throw_tomato(game, assets, gsc->audience[gsc->audience_index].location,
-                   gsc->player.location, 20);
+      throw_tomato(game, assets,
+                   gsc->audience[gsc->audience_index].throw_location,
+                   gsc->player_location_bookmark, 20);
     }
     break;
   default:
@@ -309,4 +339,20 @@ static void hide_tomato(GameContext *game, GameAssets *assets) {
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
   gsc->tomato.active = false;
   pd->sprite->setVisible(assets->tomato_sprite, false);
+}
+
+static void kill_player(GameContext *game, GameAssets *assets) {
+  PlaydateAPI *pd = game->pd;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
+  gsc->state = STATE_GAME_OVER;
+  pd->sprite->setImageFlip(assets->bird_sprite, kBitmapFlippedY);
+}
+
+static void reset_game(GameContext *game, GameAssets *assets) {
+  PlaydateAPI *pd = game->pd;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
+  gsc->state = STATE_WAIT_TO_HECKLE;
+  gsc->change_state_time = AFTER_THROW_WAIT_S;
+  pd->system->resetElapsedTime();
+  pd->sprite->setImageFlip(assets->bird_sprite, kBitmapUnflipped);
 }

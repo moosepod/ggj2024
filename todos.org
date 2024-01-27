@@ -9,6 +9,15 @@
 
 - [X] Create progammer sprites for character, tomato, stage
 - [X] Move sprite with d-pad. Check bounds
+
+* First round  of work
+- [ ] Shrink hitbox
+- [X] Store target when text opens
+- [X] Fix offsets for tomato launch  
+- [ ] Fix speed
+- [ ] Randomize
+  
+* Other stuff
 - [ ] Finalize image (get rid of bird 2, etc)
 - [ ] Figure out use of crank with d-pad
 - [ ] Show jokes over heads of users
@@ -17,7 +26,8 @@
 - [ ] Add collision detection
 - [ ] Add a count-up timer
 - [ ] Add a get ready/win/loss state
- 
+- [ ] Tomato "splat" on back
+  
 * Prototype - hook
 - [ ] Hook comes in from side of stage at different speeds. With "get off the stage" bubble
 - [ ] Hook comes in from side of stage at different speeds
