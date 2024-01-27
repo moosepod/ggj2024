@@ -1,5 +1,9 @@
 {
   "fonts": [
+    {
+      "name": "main",
+      "path": "assets/fonts/font-pedallica"
+    }
   ],
   "metadata": {
     "bibliography": {

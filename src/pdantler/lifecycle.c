@@ -120,6 +120,13 @@ static void lifecycle_unpause_game(GameContext *game, GameAssets *assets) {
 static void init_fonts(GameContext *game) {
   PlaydateAPI *pd = game->pd;
   const char *outerr = NULL;
+
+  pdlogger_info("lifecycle.c: .... loading font 'main_font'");
+  game->main_font =
+      pd->graphics->loadFont("assets/fonts/font-pedallica", &outerr);
+  if (outerr) {
+    pdlogger_error("init_game_fonts: error loading font main. %s", outerr);
+  }
 }
 
 static void init_sounds(GameContext *game) {

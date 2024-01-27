@@ -55,6 +55,8 @@ typedef struct {
   void *game_assets;
   void *game_userdata;
 
+  LCDFont *main_font;
+
 } GameContext;
 
 // Avoid using this in normal lifecycle flow. Appropriate for use

@@ -35,7 +35,7 @@ build/src/scenes/scene_game.o: src/scenes/scene_game.c \
  /usr/include/newlib/sys/timespec.h /usr/include/newlib/sys/_timespec.h \
  /usr/include/newlib/sys/_pthreadtypes.h /usr/include/newlib/sys/sched.h \
  /usr/include/newlib/machine/types.h /usr/include/newlib/sys/stdio.h \
- src/pdantler/mooselib.h
+ src/pdantler/mooselib.h src/pdantler/printf.h
 src/scenes/scene_game.h:
 src/scenes/../common.h:
 /home/mchristensen/src/PlaydateSDK-2.2.0/C_API/pd_api.h:
@@ -90,3 +90,4 @@ src/scenes/../pdantler/mooselib.h:
 /usr/include/newlib/machine/types.h:
 /usr/include/newlib/sys/stdio.h:
 src/pdantler/mooselib.h:
+src/pdantler/printf.h:
