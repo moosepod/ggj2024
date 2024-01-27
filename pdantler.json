@@ -22,7 +22,11 @@
   "scenes": [
     {
       "menus": [],
-      "name": "game",
+	"name": "game",
+	"standalone_images": [{"name":"speech_bubble_base","image":{
+	"path": "assets/speech_bubble.png"}}
+      ], 
+
       "sprites": [
         {
           "image": {
@@ -36,9 +40,9 @@
           "visible": true,
           "zindex": 1
         },
-	          {
+	  {
           "image": {
-            "path": "assets/bird.png"
+            "path": "assets/bird2.png"
           },  
           "name": "bird",
           "position": {
@@ -47,9 +51,15 @@
           },
           "visible": true,
           "zindex": 2
-        }
-
-      ]
+          },
+	  {"name": "speech_bubble",
+	  "position": {"x": 200,"y": 120},
+	  "image": {"size": {"width": 144, "height": 55},
+	    "background": "white"},
+	  "visible": false,
+	  "zindex": 3
+	}
+       ]
     }
   ]
 }

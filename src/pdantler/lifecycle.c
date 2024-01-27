@@ -10,6 +10,13 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   PlaydateAPI *pd = game->pd;
   const char *outerr = NULL;
 
+  assets->speech_bubble_base_image =
+      pd->graphics->loadBitmap("assets/speech_bubble.png", &outerr);
+  if (outerr) {
+    pdlogger_error("init_game_game: error loading image speech_bubble_base. %s",
+                   outerr);
+  }
+
   assets->background_image =
       pd->graphics->loadBitmap("assets/background.png", &outerr);
   if (outerr) {
@@ -33,7 +40,7 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->background_sprite, false);
 
-  assets->bird_image = pd->graphics->loadBitmap("assets/bird.png", &outerr);
+  assets->bird_image = pd->graphics->loadBitmap("assets/bird2.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image bird. %s", outerr);
   }
@@ -53,6 +60,24 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // Sprite are always invisible when created in init. They will be
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->bird_sprite, false);
+
+  assets->speech_bubble_image = pd->graphics->newBitmap(144, 55, kColorWhite);
+
+  if (!assets->speech_bubble_image) {
+    pdlogger_error("init_game_game: image speech_bubble loaded as null.");
+  }
+
+  assets->speech_bubble_sprite = pd->sprite->newSprite();
+
+  pd->sprite->setImage(assets->speech_bubble_sprite,
+                       assets->speech_bubble_image, kBitmapUnflipped);
+  pd->sprite->setZIndex(assets->speech_bubble_sprite, 3);
+
+  pd->sprite->moveTo(assets->speech_bubble_sprite, 200, 120);
+  pd->sprite->addSprite(assets->speech_bubble_sprite);
+  // Sprite are always invisible when created in init. They will be
+  // made visible during the scene enter/exit code
+  pd->sprite->setVisible(assets->speech_bubble_sprite, false);
 }
 
 static void lifecycle_enter_game(GameContext *game, GameAssets *assets) {
@@ -77,6 +102,9 @@ static void lifecycle_exit_game(GameContext *game, GameAssets *assets) {
 
   pd->sprite->setVisible(assets->bird_sprite, false);
   pdlogger_info("lifecycle.c: .... hiding sprite 'bird_sprite'");
+
+  pd->sprite->setVisible(assets->speech_bubble_sprite, false);
+  pdlogger_info("lifecycle.c: .... hiding sprite 'speech_bubble_sprite'");
 
   exit_game(game, assets);
 }

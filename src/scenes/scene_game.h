@@ -13,6 +13,11 @@ typedef struct {
   LCDBitmap *bird_image;
   LCDSprite *bird_sprite;
 
+  LCDBitmap *speech_bubble_image;
+  LCDSprite *speech_bubble_sprite;
+
+  LCDBitmap *speech_bubble_base_image;
+
 } GameAssets;
 
 extern void init_game(GameContext *game, GameAssets *assets);
