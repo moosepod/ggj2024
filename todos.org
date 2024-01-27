@@ -9,6 +9,7 @@
 
 - [X] Create progammer sprites for character, tomato, stage
 - [X] Move sprite with d-pad. Check bounds
+- [ ] Finalize image (get rid of bird 2, etc)
 - [ ] Figure out use of crank with d-pad
 - [ ] Show jokes over heads of users
 - [ ] Throw tomatoes from users
@@ -18,11 +19,8 @@
 - [ ] Add a get ready/win/loss state
  
 * Prototype - hook
-<<<<<<< HEAD
 - [ ] Hook comes in from side of stage at different speeds. With "get off the stage" bubble
-=======
 - [ ] Hook comes in from side of stage at different speeds
->>>>>>> d895590ddafd325d998b9d63327f9c54473d631c
 - [ ] Will need to be animated (add some kind of "animator" to pdantler?)
 
 

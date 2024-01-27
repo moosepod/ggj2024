@@ -34,7 +34,7 @@
       "sprites": [
         {
           "image": {
-            "path": "assets/background.png"
+            "path": "assets/background2.png"
           },  
           "name": "background",
           "position": {
@@ -56,12 +56,24 @@
           "visible": true,
           "zindex": 2
           },
+	  {
+          "image": {
+            "path": "assets/audience.png"
+          },  
+          "name": "audience",
+          "position": {
+            "x": 200,
+            "y": 200
+          },
+          "visible": true,
+          "zindex": 3
+          },
 	  {"name": "speech_bubble",
 	  "position": {"x": 200,"y": 120},
 	  "image": {"size": {"width": 144, "height": 55},
 	    "background": "white"},
 	  "visible": false,
-	  "zindex": 3
+	  "zindex": 4
 	}
        ]
     }

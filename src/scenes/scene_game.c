@@ -6,6 +6,7 @@
 #define DEBOUNCER_DELAY 5
 #define SCREEN_WIDTH 400
 #define AUDIENCE_MEMBER_COUNT 7
+#define HECKLE_COUNT 7
 #define SPEECH_BUBBLE_LEN 50
 
 typedef struct {
@@ -28,8 +29,11 @@ typedef struct {
 typedef struct {
   Player player;
   SpeechBubble speech_bubble;
-  int audience_index;
   AudienceMember audience[AUDIENCE_MEMBER_COUNT];
+  int audience_index;
+  char *heckles[HECKLE_COUNT];
+  int heckle_index;
+
 } GameSceneContext;
 
 static void move_player(PlaydateAPI *pd, Player *player, GameAssets *assets,
@@ -73,8 +77,11 @@ GameScene tick_game(GameContext *game, GameAssets *assets,
   } else if ((debounced_buttons & kButtonA)) {
     gsc->audience_index = MLIB_CLAMP_TO_RANGE_MOD(gsc->audience_index + 1, 0,
                                                   AUDIENCE_MEMBER_COUNT - 1);
+    gsc->heckle_index =
+        MLIB_CLAMP_TO_RANGE_MOD(gsc->heckle_index + 1, 0, HECKLE_COUNT - 1);
     show_speech(game, assets, gsc->audience[gsc->audience_index].location,
-                "Get new material!", !gsc->audience[gsc->audience_index].right);
+                gsc->heckles[gsc->heckle_index],
+                !gsc->audience[gsc->audience_index].right);
   }
 
   return NO_SCENE;
@@ -118,6 +125,16 @@ static void init_speech_bubble(PlaydateAPI *pd, GameSceneContext *gsc,
   pd->graphics->getBitmapData(
       assets->speech_bubble_base_image, &gsc->speech_bubble.size.width,
       &gsc->speech_bubble.size.height, NULL, NULL, NULL);
+
+  gsc->heckle_index = 0;
+  gsc->heckles[gsc->heckle_index++] = "Booooo!";
+  gsc->heckles[gsc->heckle_index++] = "Get new material!";
+  gsc->heckles[gsc->heckle_index++] = "You suck!";
+  gsc->heckles[gsc->heckle_index++] = "Go home!";
+  gsc->heckles[gsc->heckle_index++] = "Get a job!";
+  gsc->heckles[gsc->heckle_index++] = "You're not funny!";
+  gsc->heckles[gsc->heckle_index++] = "I want a refund!";
+  gsc->heckle_index = 0;
 }
 
 static void init_audience(PlaydateAPI *pd, GameSceneContext *gsc,
