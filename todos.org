@@ -18,7 +18,11 @@
 - [ ] Add a get ready/win/loss state
  
 * Prototype - hook
+<<<<<<< HEAD
 - [ ] Hook comes in from side of stage at different speeds. With "get off the stage" bubble
+=======
+- [ ] Hook comes in from side of stage at different speeds
+>>>>>>> d895590ddafd325d998b9d63327f9c54473d631c
 - [ ] Will need to be animated (add some kind of "animator" to pdantler?)
 
 
