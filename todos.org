@@ -1,0 +1,44 @@
+* Setup
+
+- [ ] Look at diversifiers
+- [ ] Setup pdantler
+- [ ] Recruit art?
+- [ ] Recruit voice acting
+  
+* Prototype - loop
+
+- [ ] Create progammer sprites for character, tomato, stage
+- [ ] Move sprite with d-pad. Check bounds
+- [ ] Figure out use of crank with d-pad
+- [ ] Show jokes over heads of users
+- [ ] Throw tomatoes from users
+- [ ] Timer?
+- [ ] Add collision detection
+- [ ] Add a count-up timer
+- [ ] Add a get ready/win/loss state
+ 
+* Prototype - hook
+- [ ] Hook comes in from side of stage at different speeds. With "get off the stage" bubble
+- [ ] Will need to be animated (add some kind of "animator" to pdantler?)
+
+
+
+* Brainstorming
+- [ ] Other things that can be thrown
+  
+* Art
+- [ ] Character, including animation
+- [ ] Tomato
+- [ ] Hook
+- [ ] Stage/audience
+
+* VO
+- [ ] Support subtitles too for accessibility
+- [ ] Brainstorm bad jokes
+- [ ] Brainstrom hecking
+- [ ] Record some vo 
+  
+* Closeout
+- [ ] Credits page
+- [ ] Splash page
+- [ ] Main icon

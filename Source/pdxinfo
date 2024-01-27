@@ -1,0 +1,7 @@
+name=Heckler
+author=Moosepod Software
+description=Survive the hecklers! Made for GGJ2024
+bundleID=com.moosepod.heckler
+version=1.0
+buildNumber=1
+imagePath=assets/launcher

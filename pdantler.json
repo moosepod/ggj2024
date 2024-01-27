@@ -1,0 +1,55 @@
+{
+  "fonts": [
+  ],
+  "metadata": {
+    "bibliography": {
+      "author": "Moosepod Software", 
+      "bundle_id": "com.moosepod.heckler",
+      "description": "Survive the hecklers! Made for GGJ2024",
+      "title": "Heckler", 
+      "version": "1.0",
+      "build_number": 1
+    },
+    "build": {
+      "additional_src": [
+      ],
+      "additional_test_src": [
+      ] 
+    },
+    "default_scene": "game", 
+    "log_level": "all"
+  },
+  "scenes": [
+    {
+      "menus": [],
+      "name": "game",
+      "sprites": [
+        {
+          "image": {
+            "path": "assets/background.png"
+          },  
+          "name": "background",
+          "position": {
+            "x": 200,
+            "y": 120  
+          },
+          "visible": true,
+          "zindex": 1
+        },
+	          {
+          "image": {
+            "path": "assets/bird.png"
+          },  
+          "name": "bird",
+          "position": {
+            "x": 200,
+            "y": 120  
+          },
+          "visible": true,
+          "zindex": 2
+        }
+
+      ]
+    }
+  ]
+}
