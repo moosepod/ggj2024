@@ -51,19 +51,19 @@
           "name": "bird",
           "position": {
             "x": 200,
-            "y": 120  
+            "y": 100  
           },
           "visible": true,
           "zindex": 2
           },
 	  {
           "image": {
-            "path": "assets/audience.png"
+            "path": "assets/foreground_birds.png"
           },  
           "name": "audience",
           "position": {
             "x": 200,
-            "y": 200
+            "y": 120
           },
           "visible": true,
           "zindex": 3

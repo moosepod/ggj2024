@@ -55,14 +55,14 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
                        kBitmapUnflipped);
   pd->sprite->setZIndex(assets->bird_sprite, 2);
 
-  pd->sprite->moveTo(assets->bird_sprite, 200, 120);
+  pd->sprite->moveTo(assets->bird_sprite, 200, 100);
   pd->sprite->addSprite(assets->bird_sprite);
   // Sprite are always invisible when created in init. They will be
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->bird_sprite, false);
 
   assets->audience_image =
-      pd->graphics->loadBitmap("assets/audience.png", &outerr);
+      pd->graphics->loadBitmap("assets/foreground_birds.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image audience. %s", outerr);
   }
@@ -77,7 +77,7 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
                        kBitmapUnflipped);
   pd->sprite->setZIndex(assets->audience_sprite, 3);
 
-  pd->sprite->moveTo(assets->audience_sprite, 200, 200);
+  pd->sprite->moveTo(assets->audience_sprite, 200, 120);
   pd->sprite->addSprite(assets->audience_sprite);
   // Sprite are always invisible when created in init. They will be
   // made visible during the scene enter/exit code

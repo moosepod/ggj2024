@@ -5,9 +5,18 @@
 #define DEFAULT_BIRD_VELOCITY 5
 #define DEBOUNCER_DELAY 5
 #define SCREEN_WIDTH 400
-#define AUDIENCE_MEMBER_COUNT 7
+#define AUDIENCE_MEMBER_COUNT 5
 #define HECKLE_COUNT 7
 #define SPEECH_BUBBLE_LEN 50
+#define AFTER_HECKLE_WAIT_S 2.0
+#define AFTER_THROW_WAIT_S 2.0
+
+typedef enum {
+  STATE_WAIT_TO_HECKLE,
+  STATE_HECKLE,
+  STATE_WAIT_TO_THROW,
+  STATE_THROW
+} GameState;
 
 typedef struct {
   MLIBPoint location;
@@ -33,7 +42,8 @@ typedef struct {
   int audience_index;
   char *heckles[HECKLE_COUNT];
   int heckle_index;
-
+  float change_state_time;
+  GameState state;
 } GameSceneContext;
 
 static void move_player(PlaydateAPI *pd, Player *player, GameAssets *assets,
@@ -46,6 +56,7 @@ static void init_speech_bubble(PlaydateAPI *pd, GameSceneContext *gsc,
                                GameAssets *assets);
 static void show_speech(GameContext *game, GameAssets *assets, MLIBPoint p,
                         char *text, bool flipped);
+static void hide_speech(GameContext *game, GameAssets *assets);
 
 // Initializes the scene. Do not change the function name/signature.
 void init_game(GameContext *game, GameAssets *assets) {
@@ -59,8 +70,9 @@ void init_game(GameContext *game, GameAssets *assets) {
   init_audience(pd, gsc, assets);
   init_speech_bubble(pd, gsc, assets);
 
-  show_speech(game, assets, gsc->audience[gsc->audience_index].location,
-              "Get new material!", !gsc->audience[gsc->audience_index].right);
+  gsc->state = STATE_WAIT_TO_HECKLE;
+  gsc->change_state_time = AFTER_THROW_WAIT_S;
+  pd->system->resetElapsedTime();
 }
 
 // Run once every game loop when scene is active. Do not change the function
@@ -68,20 +80,40 @@ void init_game(GameContext *game, GameAssets *assets) {
 // should be used
 GameScene tick_game(GameContext *game, GameAssets *assets,
                     PDButtons debounced_buttons, int delta) {
-
+  PlaydateAPI *pd = game->pd;
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
   if ((debounced_buttons & kButtonLeft)) {
     move_player(game->pd, &gsc->player, assets, -1 * gsc->player.velocity);
   } else if ((debounced_buttons & kButtonRight)) {
     move_player(game->pd, &gsc->player, assets, gsc->player.velocity);
-  } else if ((debounced_buttons & kButtonA)) {
-    gsc->audience_index = MLIB_CLAMP_TO_RANGE_MOD(gsc->audience_index + 1, 0,
-                                                  AUDIENCE_MEMBER_COUNT - 1);
-    gsc->heckle_index =
-        MLIB_CLAMP_TO_RANGE_MOD(gsc->heckle_index + 1, 0, HECKLE_COUNT - 1);
-    show_speech(game, assets, gsc->audience[gsc->audience_index].location,
-                gsc->heckles[gsc->heckle_index],
-                !gsc->audience[gsc->audience_index].right);
+  }
+
+  switch (gsc->state) {
+  case STATE_WAIT_TO_HECKLE:
+    if (pd->system->getElapsedTime() > gsc->change_state_time) {
+      show_speech(game, assets, gsc->audience[gsc->audience_index].location,
+                  gsc->heckles[gsc->heckle_index],
+                  !gsc->audience[gsc->audience_index].right);
+      gsc->audience_index = MLIB_CLAMP_TO_RANGE_MOD(gsc->audience_index + 1, 0,
+                                                    AUDIENCE_MEMBER_COUNT - 1);
+      gsc->heckle_index =
+          MLIB_CLAMP_TO_RANGE_MOD(gsc->heckle_index + 1, 0, HECKLE_COUNT - 1);
+
+      gsc->change_state_time = AFTER_HECKLE_WAIT_S;
+      gsc->state = STATE_WAIT_TO_THROW;
+      pd->system->resetElapsedTime();
+    };
+    break;
+  case STATE_WAIT_TO_THROW:
+    if (pd->system->getElapsedTime() > gsc->change_state_time) {
+      gsc->change_state_time = AFTER_THROW_WAIT_S;
+      pd->system->resetElapsedTime();
+      hide_speech(game, assets);
+      gsc->state = STATE_WAIT_TO_HECKLE;
+    }
+    break;
+  default:
+    break;
   }
 
   return NO_SCENE;
@@ -100,6 +132,7 @@ void unpause_game(GameContext *game, GameAssets *assets) {}
 //
 static void move_player(PlaydateAPI *pd, Player *player, GameAssets *assets,
                         int x) {
+  pd->sprite->setImageFlip(assets->bird_sprite, x < 0);
   player->location.x =
       MLIB_CLAMP_TO_RANGE(player->location.x + x, player->size.width / 2,
                           SCREEN_WIDTH - player->size.width / 2);
@@ -143,23 +176,17 @@ static void init_audience(PlaydateAPI *pd, GameSceneContext *gsc,
   gsc->audience[0].location = MLIBPOINT_CREATE(45, 200);
   gsc->audience[0].right = false;
 
-  gsc->audience[1].location = MLIBPOINT_CREATE(100, 200);
+  gsc->audience[1].location = MLIBPOINT_CREATE(130, 200);
   gsc->audience[1].right = false;
 
-  gsc->audience[2].location = MLIBPOINT_CREATE(157, 200);
+  gsc->audience[2].location = MLIBPOINT_CREATE(200, 200);
   gsc->audience[2].right = false;
 
-  gsc->audience[3].location = MLIBPOINT_CREATE(221, 200);
-  gsc->audience[3].right = false;
+  gsc->audience[3].location = MLIBPOINT_CREATE(128, 200);
+  gsc->audience[3].right = true;
 
-  gsc->audience[4].location = MLIBPOINT_CREATE(128, 200);
+  gsc->audience[4].location = MLIBPOINT_CREATE(190, 200);
   gsc->audience[4].right = true;
-
-  gsc->audience[5].location = MLIBPOINT_CREATE(180, 200);
-  gsc->audience[5].right = true;
-
-  gsc->audience[6].location = MLIBPOINT_CREATE(240, 200);
-  gsc->audience[6].right = true;
 
   gsc->audience_index = 0;
 }
@@ -197,4 +224,9 @@ static void show_speech(GameContext *game, GameAssets *assets, MLIBPoint p,
   pd->sprite->moveTo(assets->speech_bubble_sprite,
                      p.x + gsc->speech_bubble.size.width / 2,
                      p.y - gsc->speech_bubble.size.height / 2);
+}
+
+static void hide_speech(GameContext *game, GameAssets *assets) {
+  PlaydateAPI *pd = game->pd;
+  pd->sprite->setVisible(assets->speech_bubble_sprite, false);
 }
