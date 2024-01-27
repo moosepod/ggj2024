@@ -1,17 +1,19 @@
-# Compiled Lua sources
-luac.out
+# Prerequisites
+*.d
 
-# luarocks build files
-*.src.rock
-*.zip
-*.tar.gz
+# Python
+*.pyc
 
 # Object files
 *.o
-*.os
 *.ko
 *.obj
 *.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
 
 # Precompiled Headers
 *.gch
@@ -22,8 +24,6 @@ luac.out
 *.a
 *.la
 *.lo
-*.def
-*.exp
 
 # Shared objects (inc. Windows DLLs)
 *.dll
@@ -39,8 +39,23 @@ luac.out
 *.x86_64
 *.hex
 
-.vscode
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
 
-builds/
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.confy
 
-source/libraries/noble/docs/
+Heckler.pdx/**
+playdate/build/**
+playdate/*.pdx/**
+**/*.bin
+**/*.lst
