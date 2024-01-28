@@ -29,7 +29,7 @@
       "sprites": [
         {
           "image": {
-            "path": "assets/splash.png"
+            "path": "assets/sprites/splash.png"
           },  
           "name": "splash",
           "position": {
@@ -69,24 +69,24 @@
         {
           "name": "speech_bubble_base",
           "image": {
-            "path": "assets/speech_bubble.png"
+            "path": "assets/sprites/speech_bubble.png"
           }
         },
         {
           "image": {
-            "path": "assets/large_speech_bubble.png"
+            "path": "assets/sprites/large_speech_bubble.png"
           },
           "name": "joke_bubble_base"
         },
         {
           "image": {
-            "path": "assets/speech_bubble_mask.png"
+            "path": "assets/sprites/speech_bubble_mask.png"
           },
           "name": "speech_bubble_mask"
         },
         {
           "image": {
-            "path": "assets/bird3.png"
+            "path": "assets/sprites/bird3.png"
           },
           "name": "bird_mouth_open"
         }
@@ -94,7 +94,7 @@
       "sprites": [
         {
           "image": {
-            "path": "assets/background2.png"
+            "path": "assets/sprites/background2.png"
           },
           "name": "background",
           "position": {
@@ -106,7 +106,7 @@
         },
         {
           "image": {
-            "path": "assets/bird2.png"
+            "path": "assets/sprites/bird2.png"
           },
           "name": "bird",
           "position": {
@@ -118,7 +118,7 @@
         },
         {
           "image": {
-            "path": "assets/foreground_birds.png"
+            "path": "assets/sprites/foreground_birds.png"
           },
           "name": "audience",
           "position": {
@@ -130,7 +130,7 @@
         },
         {
           "image": {
-            "path": "assets/tomato.png"
+            "path": "assets/sprites/tomato.png"
           },
           "name": "tomato",
           "position": {
@@ -142,7 +142,7 @@
         },
         {
           "image": {
-            "path": "assets/hook.png"
+            "path": "assets/sprites/hook.png"
           },
           "name": "hook",
           "position": {
@@ -154,7 +154,7 @@
         },
         {
           "image": {
-            "path": "assets/hooked_crow.png"
+            "path": "assets/sprites/hooked_crow.png"
           },
           "name": "hooked_crow",
           "position": {
@@ -203,7 +203,7 @@
             "y": 30
           },
           "image": {
-            "path": "assets/start_text.png"
+            "path": "assets/sprites/start_text.png"
           },
           "visible": false,
           "zindex": 5

@@ -11,7 +11,8 @@ static void init_game_splash(GameContext *game, SplashAssets *assets) {
   PlaydateAPI *pd = game->pd;
   const char *outerr = NULL;
 
-  assets->splash_image = pd->graphics->loadBitmap("assets/splash.png", &outerr);
+  assets->splash_image =
+      pd->graphics->loadBitmap("assets/sprites/splash.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_splash: error loading image splash. %s", outerr);
   }
@@ -66,35 +67,35 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   const char *outerr = NULL;
 
   assets->speech_bubble_base_image =
-      pd->graphics->loadBitmap("assets/speech_bubble.png", &outerr);
+      pd->graphics->loadBitmap("assets/sprites/speech_bubble.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image speech_bubble_base. %s",
                    outerr);
   }
 
-  assets->joke_bubble_base_image =
-      pd->graphics->loadBitmap("assets/large_speech_bubble.png", &outerr);
+  assets->joke_bubble_base_image = pd->graphics->loadBitmap(
+      "assets/sprites/large_speech_bubble.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image joke_bubble_base. %s",
                    outerr);
   }
 
-  assets->speech_bubble_mask_image =
-      pd->graphics->loadBitmap("assets/speech_bubble_mask.png", &outerr);
+  assets->speech_bubble_mask_image = pd->graphics->loadBitmap(
+      "assets/sprites/speech_bubble_mask.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image speech_bubble_mask. %s",
                    outerr);
   }
 
   assets->bird_mouth_open_image =
-      pd->graphics->loadBitmap("assets/bird3.png", &outerr);
+      pd->graphics->loadBitmap("assets/sprites/bird3.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image bird_mouth_open. %s",
                    outerr);
   }
 
   assets->background_image =
-      pd->graphics->loadBitmap("assets/background2.png", &outerr);
+      pd->graphics->loadBitmap("assets/sprites/background2.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image background. %s",
                    outerr);
@@ -116,7 +117,8 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->background_sprite, false);
 
-  assets->bird_image = pd->graphics->loadBitmap("assets/bird2.png", &outerr);
+  assets->bird_image =
+      pd->graphics->loadBitmap("assets/sprites/bird2.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image bird. %s", outerr);
   }
@@ -138,7 +140,7 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   pd->sprite->setVisible(assets->bird_sprite, false);
 
   assets->audience_image =
-      pd->graphics->loadBitmap("assets/foreground_birds.png", &outerr);
+      pd->graphics->loadBitmap("assets/sprites/foreground_birds.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image audience. %s", outerr);
   }
@@ -159,7 +161,8 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->audience_sprite, false);
 
-  assets->tomato_image = pd->graphics->loadBitmap("assets/tomato.png", &outerr);
+  assets->tomato_image =
+      pd->graphics->loadBitmap("assets/sprites/tomato.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image tomato. %s", outerr);
   }
@@ -180,7 +183,8 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->tomato_sprite, false);
 
-  assets->hook_image = pd->graphics->loadBitmap("assets/hook.png", &outerr);
+  assets->hook_image =
+      pd->graphics->loadBitmap("assets/sprites/hook.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image hook. %s", outerr);
   }
@@ -202,7 +206,7 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   pd->sprite->setVisible(assets->hook_sprite, false);
 
   assets->hooked_crow_image =
-      pd->graphics->loadBitmap("assets/hooked_crow.png", &outerr);
+      pd->graphics->loadBitmap("assets/sprites/hooked_crow.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image hooked_crow. %s",
                    outerr);
@@ -261,7 +265,7 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   pd->sprite->setVisible(assets->joke_bubble_sprite, false);
 
   assets->start_text_image =
-      pd->graphics->loadBitmap("assets/start_text.png", &outerr);
+      pd->graphics->loadBitmap("assets/sprites/start_text.png", &outerr);
   if (outerr) {
     pdlogger_error("init_game_game: error loading image start_text. %s",
                    outerr);
