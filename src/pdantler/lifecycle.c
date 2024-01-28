@@ -4,6 +4,7 @@
 */
 
 #include "../common.h"
+#include "src/scenes/scene_credits.h"
 #include "src/scenes/scene_game.h"
 #include "src/scenes/scene_splash.h"
 
@@ -60,6 +61,63 @@ static void lifecycle_pause_splash(GameContext *game, SplashAssets *assets) {
 
 static void lifecycle_unpause_splash(GameContext *game, SplashAssets *assets) {
   unpause_splash(game, assets);
+}
+
+static void init_game_credits(GameContext *game, CreditsAssets *assets) {
+  PlaydateAPI *pd = game->pd;
+  const char *outerr = NULL;
+
+  assets->credits_image =
+      pd->graphics->loadBitmap("assets/sprites/credits_w_logo.png", &outerr);
+  if (outerr) {
+    pdlogger_error("init_game_credits: error loading image credits. %s",
+                   outerr);
+  }
+
+  if (!assets->credits_image) {
+    pdlogger_error("init_game_credits: image credits loaded as null.");
+  }
+
+  assets->credits_sprite = pd->sprite->newSprite();
+
+  pd->sprite->setImage(assets->credits_sprite, assets->credits_image,
+                       kBitmapUnflipped);
+  pd->sprite->setZIndex(assets->credits_sprite, 1);
+
+  pd->sprite->moveTo(assets->credits_sprite, 200, 120);
+  pd->sprite->addSprite(assets->credits_sprite);
+  // Sprite are always invisible when created in init. They will be
+  // made visible during the scene enter/exit code
+  pd->sprite->setVisible(assets->credits_sprite, false);
+}
+
+static void lifecycle_enter_credits(GameContext *game, CreditsAssets *assets) {
+  pdlogger_info("lifecycle.c: entering scene 'credits'");
+  PlaydateAPI *pd = game->pd;
+
+  pdlogger_info("lifecycle.c: .... showing sprite 'credits_sprite'");
+  pd->sprite->setVisible(assets->credits_sprite, true);
+
+  enter_credits(game, assets);
+}
+
+static void lifecycle_exit_credits(GameContext *game, CreditsAssets *assets) {
+  pdlogger_info("lifecycle.c: exiting scene 'credits'");
+  PlaydateAPI *pd = game->pd;
+
+  pd->sprite->setVisible(assets->credits_sprite, false);
+  pdlogger_info("lifecycle.c: .... hiding sprite 'credits_sprite'");
+
+  exit_credits(game, assets);
+}
+
+static void lifecycle_pause_credits(GameContext *game, CreditsAssets *assets) {
+  pause_credits(game, assets);
+}
+
+static void lifecycle_unpause_credits(GameContext *game,
+                                      CreditsAssets *assets) {
+  unpause_credits(game, assets);
 }
 
 static void init_game_game(GameContext *game, GameAssets *assets) {
@@ -464,6 +522,9 @@ void pdantler_switch_to_scene(GameContext *game, GameScene scene) {
   case SCENE_SPLASH:
     lifecycle_exit_splash(game, (SplashAssets *)game->splash_assets);
     break;
+  case SCENE_CREDITS:
+    lifecycle_exit_credits(game, (CreditsAssets *)game->credits_assets);
+    break;
   case SCENE_GAME:
     lifecycle_exit_game(game, (GameAssets *)game->game_assets);
     break;
@@ -478,6 +539,9 @@ void pdantler_switch_to_scene(GameContext *game, GameScene scene) {
 
   case SCENE_SPLASH:
     lifecycle_enter_splash(game, (SplashAssets *)game->splash_assets);
+    break;
+  case SCENE_CREDITS:
+    lifecycle_enter_credits(game, (CreditsAssets *)game->credits_assets);
     break;
   case SCENE_GAME:
     lifecycle_enter_game(game, (GameAssets *)game->game_assets);
@@ -495,6 +559,9 @@ void lifecycle_init_game(GameContext *game) {
   game->splash_assets = MLIB_CALLOC(1, sizeof(SplashAssets), game->mem_ctx);
   init_game_splash(game, (SplashAssets *)game->splash_assets);
 
+  game->credits_assets = MLIB_CALLOC(1, sizeof(CreditsAssets), game->mem_ctx);
+  init_game_credits(game, (CreditsAssets *)game->credits_assets);
+
   game->game_assets = MLIB_CALLOC(1, sizeof(GameAssets), game->mem_ctx);
   init_game_game(game, (GameAssets *)game->game_assets);
 
@@ -502,9 +569,10 @@ void lifecycle_init_game(GameContext *game) {
   // to being on demand and having some kind of loading process
   // (which also handles the sprite loads from init_game)
   init_splash(game, (SplashAssets *)game->splash_assets);
+  init_credits(game, (CreditsAssets *)game->credits_assets);
   init_game(game, (GameAssets *)game->game_assets);
 
   init_sounds(game);
 
-  pdantler_switch_to_scene(game, SCENE_GAME);
+  pdantler_switch_to_scene(game, SCENE_SPLASH);
 }

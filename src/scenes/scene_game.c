@@ -6,8 +6,8 @@
 #define DEBOUNCER_DELAY 5
 #define SCREEN_WIDTH 400
 #define AUDIENCE_MEMBER_COUNT 6
-#define HECKLE_COUNT 8
-#define JOKE_COUNT 8
+#define HECKLE_COUNT 11
+#define JOKE_COUNT 15
 #define AFTER_JOKE_WAIT_S 3.0
 #define SPEECH_BUBBLE_LEN 50
 #define INITIAL_HECKLE_S 2.0
@@ -23,6 +23,9 @@
 #define HECKLE_SOUND_COUNT 8
 
 #define MAX_VELOCITY 15
+
+// Uncomment to go into demo mode that doesn't randomize audience
+#define DEMO_MODE
 
 typedef enum {
   STATE_JOKE,
@@ -47,6 +50,7 @@ typedef struct {
   int velocity;
   long animation_index;
   bool mouth_open;
+  bool flipped;
 } Player;
 
 typedef struct {
@@ -87,6 +91,11 @@ typedef struct {
   float current_hook_velocity;
   float current_tomato_velocity;
   float current_heckle_wait;
+  int last_joke_text_index;
+  int last_heckle_text_index;
+  int last_heckle_sound_index;
+  int last_joke_sound_index;
+  int last_audience_index;
 } GameSceneContext;
 
 static void move_player(PlaydateAPI *pd, Player *player, GameAssets *assets,
@@ -129,11 +138,18 @@ static int rand_int_range(int min, int max) {
   return (rand() % (max - min)) + min;
 }
 
+static int rand_int_range_skip(int min, int max, int skip) {
+  int v;
+  do {
+    v = rand_int_range(min, max);
+  } while (v == skip);
+
+  return v;
+}
+
 // Initializes the scene. Do not change the function name/signature.
 void init_game(GameContext *game, GameAssets *assets) {
   PlaydateAPI *pd = game->pd;
-
-  game->debouncer.delay = DEBOUNCER_DELAY;
 
   GameSceneContext *gsc = pd->system->realloc(NULL, sizeof(GameSceneContext));
   game->game_userdata = gsc;
@@ -160,6 +176,7 @@ GameScene tick_game(GameContext *game, GameAssets *assets,
     break;
   case STATE_HECKLING:
   case STATE_THROWING:
+  case STATE_JOKE:
     handle_movement(pd, gsc, debounced_buttons, assets);
   // Fallthrough to default deliberate here
   default:
@@ -172,6 +189,8 @@ GameScene tick_game(GameContext *game, GameAssets *assets,
 }
 
 void enter_game(GameContext *game, GameAssets *assets) {
+  game->debouncer.delay = DEBOUNCER_DELAY;
+
   reset_game(game, assets);
 }
 
@@ -186,12 +205,18 @@ void unpause_game(GameContext *game, GameAssets *assets) {}
 //
 static void move_player(PlaydateAPI *pd, Player *player, GameAssets *assets,
                         int x) {
-  pd->sprite->setImageFlip(assets->bird_sprite, x < 0);
-  player->location.x =
+
+  int new_x =
       MLIB_CLAMP_TO_RANGE(player->location.x + x, player->size.width / 2,
                           SCREEN_WIDTH - player->size.width / 2);
-  pd->sprite->moveTo(assets->bird_sprite, player->location.x,
-                     player->location.y);
+
+  if (new_x != player->location.x) {
+    player->flipped = new_x < player->location.x;
+    pd->sprite->setImageFlip(assets->bird_sprite, player->flipped);
+    player->location.x = new_x;
+    pd->sprite->moveTo(assets->bird_sprite, player->location.x,
+                       player->location.y);
+  }
 }
 
 static void init_player(PlaydateAPI *pd, GameSceneContext *gsc,
@@ -204,6 +229,7 @@ static void init_player(PlaydateAPI *pd, GameSceneContext *gsc,
   gsc->player.location.y = y;
   gsc->player.start_location.x = x;
   gsc->player.start_location.y = y;
+  gsc->player.flipped = false;
 
   gsc->player.hitbox = MLIBRECT_CREATE(16, 16, 80, 50);
 
@@ -237,6 +263,9 @@ static void init_speech_bubble(PlaydateAPI *pd, GameSceneContext *gsc,
   gsc->heckles[gsc->heckle_index++] = "Get a job!";
   gsc->heckles[gsc->heckle_index++] = "You're not funny!";
   gsc->heckles[gsc->heckle_index++] = "I want a refund!";
+  gsc->heckles[gsc->heckle_index++] = "You call this funny?";
+  gsc->heckles[gsc->heckle_index++] = "What is this?";
+  gsc->heckles[gsc->heckle_index++] = "Next comic!";
   gsc->heckle_index = 0;
 }
 
@@ -259,6 +288,20 @@ static void init_jokes(PlaydateAPI *pd, GameSceneContext *gsc,
       "Shout out to my fingers. I can count on all of them.";
   gsc->jokes[gsc->joke_index++] =
       "I made a pencil with two erasers. It was pointless.";
+  gsc->jokes[gsc->joke_index++] =
+      "Spring is here! I got so excited I wet my plants!";
+  gsc->jokes[gsc->joke_index++] = "A pony with a cough is just a little horse.";
+  gsc->jokes[gsc->joke_index++] =
+      "I used to hate facial hair, but it grew on me.";
+  gsc->jokes[gsc->joke_index++] =
+      "I tell dad jokes but have no kids. I'm a faux pa.";
+  gsc->jokes[gsc->joke_index++] =
+      "What is a funny mountain called? Hill-arious!";
+  gsc->jokes[gsc->joke_index++] =
+      "Why do we drink water? Because we can't eat it.";
+  gsc->jokes[gsc->joke_index++] =
+      "What do you call a factory that makes okay products? Satisfactory.";
+
   gsc->joke_index = 0;
 }
 
@@ -453,18 +496,29 @@ static void update_state(GameContext *game, GameAssets *assets) {
       gsc->player.mouth_open = !gsc->player.mouth_open;
       if (gsc->player.mouth_open) {
         pd->sprite->setImage(assets->bird_sprite, assets->bird_mouth_open_image,
-                             kBitmapUnflipped);
+                             gsc->player.flipped);
       } else {
         pd->sprite->setImage(assets->bird_sprite, assets->bird_image,
-                             kBitmapUnflipped);
+                             gsc->player.flipped);
       }
     }
     if (pd->system->getElapsedTime() > gsc->change_state_time) {
-      gsc->audience_index = rand_int_range(0, AUDIENCE_MEMBER_COUNT);
+#ifdef DEMO_MODE
+      gsc->audience_index = MLIB_CLAMP_TO_RANGE_MOD(gsc->audience_index + 1, 0,
+                                                    AUDIENCE_MEMBER_COUNT);
+#endif
+#ifndef DEMO_MODE
+      gsc->audience_index =
+          rand_int_range_skip(gsc->audience_index + 1, AUDIENCE_MEMBER_COUNT,
+                              gsc->last_audience_index);
+      gsc->last_audience_index = gsc->audience_index;
+#endif
       if (gsc->audience[gsc->audience_index].hook) {
         gsc->heckle_index = 0;
       } else {
-        gsc->heckle_index = rand_int_range(1, HECKLE_COUNT);
+        gsc->heckle_index =
+            rand_int_range_skip(1, HECKLE_COUNT, gsc->last_heckle_text_index);
+        gsc->last_heckle_text_index = gsc->heckle_index;
       }
 
       show_speech(game, assets,
@@ -583,6 +637,12 @@ static void start_game(GameContext *game, GameAssets *assets) {
   gsc->current_tomato_velocity = INITIAL_TOMATO_VELOCITY;
   gsc->current_heckle_wait = INITIAL_HECKLE_S;
 
+  gsc->last_joke_text_index = -1;
+  gsc->last_heckle_text_index = -1;
+  gsc->last_heckle_sound_index = -1;
+  gsc->last_joke_sound_index = -1;
+  gsc->last_audience_index = -1;
+
   new_joke(game, assets);
 }
 
@@ -592,7 +652,9 @@ static void new_joke(GameContext *game, GameAssets *assets) {
   gsc->state = STATE_JOKE;
   gsc->change_state_time = AFTER_JOKE_WAIT_S;
   pd->system->resetElapsedTime();
-  gsc->joke_index = rand_int_range(0, JOKE_COUNT);
+  gsc->joke_index =
+      rand_int_range_skip(0, JOKE_COUNT, gsc->last_joke_text_index);
+  gsc->last_joke_text_index = gsc->joke_index;
   char *joke = gsc->jokes[gsc->joke_index];
   pd->graphics->pushContext(assets->joke_bubble_image);
   pd->graphics->fillRect(0, 0, 400, 240, kColorWhite);
@@ -617,8 +679,13 @@ static void hide_joke(GameContext *game, GameAssets *assets) {
 
 static void play_random_joke_sound(GameContext *game, GameAssets *assets) {
   AudioSample *sample;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
 
-  switch (rand_int_range(0, JOKE_COUNT)) {
+  int joke_index =
+      rand_int_range_skip(0, JOKE_SOUND_COUNT, gsc->last_joke_sound_index);
+  gsc->last_joke_sound_index = joke_index;
+
+  switch (joke_index) {
   case 0:
     sample = assets->joke1_sample;
     break;
@@ -643,8 +710,13 @@ static void play_random_joke_sound(GameContext *game, GameAssets *assets) {
 
 static void play_random_heckle_sound(GameContext *game, GameAssets *assets) {
   AudioSample *sample;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
 
-  switch (rand_int_range(0, HECKLE_COUNT)) {
+  int heckle_index =
+      rand_int_range_skip(0, HECKLE_SOUND_COUNT, gsc->last_heckle_sound_index);
+  gsc->last_heckle_sound_index = heckle_index;
+
+  switch (heckle_index) {
   case 0:
     sample = assets->heckle1_sample;
     break;

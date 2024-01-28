@@ -30,7 +30,7 @@ endif
 VPATH += src
 
 # List C source files here
-SRC = src/pdantler/main.c src/pdantler/lifecycle.c src/pdantler/utils.c src/pdantler/pdlogger.c src/pdantler/printf.c src/pdantler/mooselib.c src/scenes/scene_splash.c src/scenes/scene_game.c
+SRC = src/pdantler/main.c src/pdantler/lifecycle.c src/pdantler/utils.c src/pdantler/pdlogger.c src/pdantler/printf.c src/pdantler/mooselib.c src/scenes/scene_splash.c src/scenes/scene_credits.c src/scenes/scene_game.c
 
 # List all user directories here
 UINCDIR = 

@@ -39,6 +39,8 @@ typedef enum {
 
   SCENE_SPLASH,
 
+  SCENE_CREDITS,
+
   SCENE_GAME
 
 } GameScene;
@@ -62,6 +64,8 @@ typedef struct {
   bool music_active;
   void *splash_assets;
   void *splash_userdata;
+  void *credits_assets;
+  void *credits_userdata;
   void *game_assets;
   void *game_userdata;
 

@@ -19,7 +19,7 @@
       "additional_src": [],
       "additional_test_src": []
     },
-    "default_scene": "game",
+    "default_scene": "splash",
     "log_level": "all"
   },
     "scenes": [
@@ -32,6 +32,25 @@
             "path": "assets/sprites/splash.png"
           },  
           "name": "splash",
+          "position": {
+            "x": 200,
+            "y": 120  
+          },
+          "visible": true,
+          "zindex": 1
+        }
+      ]
+    },
+
+	    {
+      "menus": [],
+      "name": "credits",
+      "sprites": [
+        {
+          "image": {
+            "path": "assets/sprites/credits_w_logo.png"
+          },  
+          "name": "credits",
           "position": {
             "x": 200,
             "y": 120  

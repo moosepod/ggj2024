@@ -6,6 +6,7 @@
 #include "../build.h"
 #include "../common.h"
 
+#include "src/scenes/scene_credits.h"
 #include "src/scenes/scene_game.h"
 #include "src/scenes/scene_splash.h"
 
@@ -64,6 +65,10 @@ static int update(void *userdata) {
   case SCENE_SPLASH:
     next_scene = tick_splash(game, (SplashAssets *)game->splash_assets,
                              debounced_buttons, delta);
+    break;
+  case SCENE_CREDITS:
+    next_scene = tick_credits(game, (CreditsAssets *)game->credits_assets,
+                              debounced_buttons, delta);
     break;
   case SCENE_GAME:
     next_scene = tick_game(game, (GameAssets *)game->game_assets,
