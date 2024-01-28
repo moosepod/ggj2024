@@ -86,6 +86,13 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
                    outerr);
   }
 
+  assets->bird_mouth_open_image =
+      pd->graphics->loadBitmap("assets/bird3.png", &outerr);
+  if (outerr) {
+    pdlogger_error("init_game_game: error loading image bird_mouth_open. %s",
+                   outerr);
+  }
+
   assets->background_image =
       pd->graphics->loadBitmap("assets/background2.png", &outerr);
   if (outerr) {
@@ -416,5 +423,5 @@ void lifecycle_init_game(GameContext *game) {
 
   init_sounds(game);
 
-  pdantler_switch_to_scene(game, SCENE_SPLASH);
+  pdantler_switch_to_scene(game, SCENE_GAME);
 }

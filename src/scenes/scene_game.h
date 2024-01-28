@@ -48,6 +48,8 @@ typedef struct {
 
   LCDBitmap *speech_bubble_mask_image;
 
+  LCDBitmap *bird_mouth_open_image;
+
   Target targets[GAME_TARGET_COUNT];
 } GameAssets;
 

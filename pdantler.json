@@ -19,7 +19,7 @@
       "additional_src": [],
       "additional_test_src": []
     },
-    "default_scene": "splash",
+    "default_scene": "game",
     "log_level": "all"
   },
     "scenes": [
@@ -83,6 +83,12 @@
             "path": "assets/speech_bubble_mask.png"
           },
           "name": "speech_bubble_mask"
+        },
+        {
+          "image": {
+            "path": "assets/bird3.png"
+          },
+          "name": "bird_mouth_open"
         }
       ],
       "sprites": [

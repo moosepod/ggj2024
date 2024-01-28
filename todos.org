@@ -31,8 +31,8 @@
 - [ ] Can't move as soon as hook starts moving back
 - [ ] Never same joke twice in row
 - [X] Add in hook with bird
-- [ ] Add in bird talk animation
-- [ ] Add in splash page
+- [X] Add in bird talk animation
+- [X] Add in splash page
 - [ ] Add in sound
     
 * Nice to have

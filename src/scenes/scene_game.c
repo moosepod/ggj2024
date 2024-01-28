@@ -18,6 +18,7 @@
 #define HOOK_VELOCITY_INCREMENT 0.5f
 #define TOMATO_VELOCITY_INCREMENT 0.5f
 #define HECKLE_WAIT_INCREMENT 0.05f
+#define PLAYER_ANIMATION_FREQUENCY 3
 
 #define MAX_VELOCITY 15
 
@@ -42,6 +43,8 @@ typedef struct {
   MLIBPoint start_location;
   MLIBRect hitbox;
   int velocity;
+  long animation_index;
+  bool mouth_open;
 } Player;
 
 typedef struct {
@@ -439,6 +442,16 @@ static void update_state(GameContext *game, GameAssets *assets) {
 
   switch (gsc->state) {
   case STATE_JOKE:
+    if (gsc->player.animation_index++ % PLAYER_ANIMATION_FREQUENCY == 0) {
+      gsc->player.mouth_open = !gsc->player.mouth_open;
+      if (gsc->player.mouth_open) {
+        pd->sprite->setImage(assets->bird_sprite, assets->bird_mouth_open_image,
+                             kBitmapUnflipped);
+      } else {
+        pd->sprite->setImage(assets->bird_sprite, assets->bird_image,
+                             kBitmapUnflipped);
+      }
+    }
     if (pd->system->getElapsedTime() > gsc->change_state_time) {
       gsc->audience_index = rand_int_range(0, AUDIENCE_MEMBER_COUNT);
       if (gsc->audience[gsc->audience_index].hook) {
@@ -549,6 +562,10 @@ static void start_game(GameContext *game, GameAssets *assets) {
 
   gsc->player.location.x = gsc->player.start_location.x;
   gsc->player.location.y = gsc->player.start_location.y;
+  gsc->player.animation_index = 0;
+  gsc->player.mouth_open = false;
+  pd->sprite->setImage(assets->bird_sprite, assets->bird_image,
+                       kBitmapUnflipped);
   pd->sprite->moveTo(assets->bird_sprite, gsc->player.location.x,
                      gsc->player.location.y);
   pd->sprite->setImageFlip(assets->bird_sprite, kBitmapUnflipped);
@@ -558,6 +575,7 @@ static void start_game(GameContext *game, GameAssets *assets) {
   gsc->current_hook_velocity = INITIAL_HOOK_VELOCITY;
   gsc->current_tomato_velocity = INITIAL_TOMATO_VELOCITY;
   gsc->current_heckle_wait = INITIAL_HECKLE_S;
+
   new_joke(game, assets);
 }
 
