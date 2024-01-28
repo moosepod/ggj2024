@@ -50,6 +50,19 @@ typedef struct {
 
   LCDBitmap *bird_mouth_open_image;
 
+  AudioSample *joke1_sample;
+  AudioSample *joke2_sample;
+  AudioSample *joke3_sample;
+  AudioSample *joke4_sample;
+  AudioSample *joke5_sample;
+  AudioSample *heckle1_sample;
+  AudioSample *heckle2_sample;
+  AudioSample *heckle3_sample;
+  AudioSample *heckle4_sample;
+  AudioSample *heckle5_sample;
+  AudioSample *heckle6_sample;
+  AudioSample *heckle7_sample;
+  AudioSample *heckle8_sample;
   Target targets[GAME_TARGET_COUNT];
 } GameAssets;
 

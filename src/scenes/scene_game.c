@@ -19,6 +19,8 @@
 #define TOMATO_VELOCITY_INCREMENT 0.5f
 #define HECKLE_WAIT_INCREMENT 0.05f
 #define PLAYER_ANIMATION_FREQUENCY 3
+#define JOKE_SOUND_COUNT 5
+#define HECKLE_SOUND_COUNT 8
 
 #define MAX_VELOCITY 15
 
@@ -119,6 +121,9 @@ static void reset_game(GameContext *game, GameAssets *assets);
 static void start_game(GameContext *game, GameAssets *assets);
 static void new_joke(GameContext *game, GameAssets *assets);
 static void hide_joke(GameContext *game, GameAssets *assets);
+
+static void play_random_joke_sound(GameContext *game, GameAssets *assets);
+static void play_random_heckle_sound(GameContext *game, GameAssets *assets);
 
 static int rand_int_range(int min, int max) {
   return (rand() % (max - min)) + min;
@@ -329,6 +334,8 @@ static void show_speech(GameContext *game, GameAssets *assets, MLIBPoint p,
   pd->sprite->moveTo(assets->speech_bubble_sprite,
                      p.x + gsc->speech_bubble.size.width / 2,
                      p.y - gsc->speech_bubble.size.height / 2);
+
+  play_random_heckle_sound(game, assets);
 }
 
 static void hide_speech(GameContext *game, GameAssets *assets) {
@@ -600,9 +607,71 @@ static void new_joke(GameContext *game, GameAssets *assets) {
   pd->graphics->popContext();
   pd->sprite->setVisible(assets->joke_bubble_sprite, true);
   gsc->current_heckle_wait -= HECKLE_WAIT_INCREMENT;
+  play_random_joke_sound(game, assets);
 }
 
 static void hide_joke(GameContext *game, GameAssets *assets) {
   PlaydateAPI *pd = game->pd;
   pd->sprite->setVisible(assets->joke_bubble_sprite, false);
+}
+
+static void play_random_joke_sound(GameContext *game, GameAssets *assets) {
+  AudioSample *sample;
+
+  switch (rand_int_range(0, JOKE_COUNT)) {
+  case 0:
+    sample = assets->joke1_sample;
+    break;
+  case 1:
+    sample = assets->joke2_sample;
+    break;
+  case 2:
+    sample = assets->joke3_sample;
+    break;
+  case 3:
+    sample = assets->joke4_sample;
+    break;
+  case 4:
+    sample = assets->joke5_sample;
+    break;
+  default:
+    sample = NULL;
+  }
+
+  pdantler_channel_start(game, sample, CHANNEL_SFX_1);
+}
+
+static void play_random_heckle_sound(GameContext *game, GameAssets *assets) {
+  AudioSample *sample;
+
+  switch (rand_int_range(0, HECKLE_COUNT)) {
+  case 0:
+    sample = assets->heckle1_sample;
+    break;
+  case 1:
+    sample = assets->heckle2_sample;
+    break;
+  case 2:
+    sample = assets->heckle3_sample;
+    break;
+  case 3:
+    sample = assets->heckle4_sample;
+    break;
+  case 4:
+    sample = assets->heckle5_sample;
+    break;
+  case 5:
+    sample = assets->heckle6_sample;
+    break;
+  case 6:
+    sample = assets->heckle7_sample;
+    break;
+  case 7:
+    sample = assets->heckle8_sample;
+    break;
+  default:
+    sample = NULL;
+  }
+
+  pdantler_channel_start(game, sample, CHANNEL_SFX_1);
 }

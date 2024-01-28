@@ -287,6 +287,85 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->start_text_sprite, false);
 
+  pdlogger_info(
+      "init_game_game: loading sample joke1 at assets/sounds/CrowJoke1.wav");
+  assets->joke1_sample = pd->sound->sample->load("assets/sounds/CrowJoke1.wav");
+  if (!assets->joke1_sample) {
+    pdlogger_error("init_game_game: sample joke1 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample joke2 at assets/sounds/CrowJoke2.wav");
+  assets->joke2_sample = pd->sound->sample->load("assets/sounds/CrowJoke2.wav");
+  if (!assets->joke2_sample) {
+    pdlogger_error("init_game_game: sample joke2 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample joke3 at assets/sounds/CrowJoke3.wav");
+  assets->joke3_sample = pd->sound->sample->load("assets/sounds/CrowJoke3.wav");
+  if (!assets->joke3_sample) {
+    pdlogger_error("init_game_game: sample joke3 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample joke4 at assets/sounds/CrowJoke4.wav");
+  assets->joke4_sample = pd->sound->sample->load("assets/sounds/CrowJoke4.wav");
+  if (!assets->joke4_sample) {
+    pdlogger_error("init_game_game: sample joke4 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample joke5 at assets/sounds/CrowJoke5.wav");
+  assets->joke5_sample = pd->sound->sample->load("assets/sounds/CrowJoke5.wav");
+  if (!assets->joke5_sample) {
+    pdlogger_error("init_game_game: sample joke5 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample heckle1 at assets/sounds/Peckle1.wav");
+  assets->heckle1_sample = pd->sound->sample->load("assets/sounds/Peckle1.wav");
+  if (!assets->heckle1_sample) {
+    pdlogger_error("init_game_game: sample heckle1 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample heckle2 at assets/sounds/Peckle2.wav");
+  assets->heckle2_sample = pd->sound->sample->load("assets/sounds/Peckle2.wav");
+  if (!assets->heckle2_sample) {
+    pdlogger_error("init_game_game: sample heckle2 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample heckle3 at assets/sounds/Peckle3.wav");
+  assets->heckle3_sample = pd->sound->sample->load("assets/sounds/Peckle3.wav");
+  if (!assets->heckle3_sample) {
+    pdlogger_error("init_game_game: sample heckle3 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample heckle4 at assets/sounds/Peckle4.wav");
+  assets->heckle4_sample = pd->sound->sample->load("assets/sounds/Peckle4.wav");
+  if (!assets->heckle4_sample) {
+    pdlogger_error("init_game_game: sample heckle4 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample heckle5 at assets/sounds/Peckle5.wav");
+  assets->heckle5_sample = pd->sound->sample->load("assets/sounds/Peckle5.wav");
+  if (!assets->heckle5_sample) {
+    pdlogger_error("init_game_game: sample heckle5 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample heckle6 at assets/sounds/Peckle6.wav");
+  assets->heckle6_sample = pd->sound->sample->load("assets/sounds/Peckle6.wav");
+  if (!assets->heckle6_sample) {
+    pdlogger_error("init_game_game: sample heckle6 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample heckle7 at assets/sounds/Peckle7.wav");
+  assets->heckle7_sample = pd->sound->sample->load("assets/sounds/Peckle7.wav");
+  if (!assets->heckle7_sample) {
+    pdlogger_error("init_game_game: sample heckle7 loaded as null.");
+  }
+  pdlogger_info(
+      "init_game_game: loading sample heckle8 at assets/sounds/Peckle8.wav");
+  assets->heckle8_sample = pd->sound->sample->load("assets/sounds/Peckle8.wav");
+  if (!assets->heckle8_sample) {
+    pdlogger_error("init_game_game: sample heckle8 loaded as null.");
+  }
+
   assets->targets[TARGET_GAME_STAGE_CENTER].rect =
       MLIBRECT_CREATE(180, 90, 40, 20);
 

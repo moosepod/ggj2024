@@ -27,15 +27,23 @@
 - [X] Add in new hook animation
 - [X] Move velocities to game context, increase as game goes on
 - [X] Bug where hook went way off edge of screen
-- [ ] Splatter tomatoes
-- [ ] Can't move as soon as hook starts moving back
-- [ ] Never same joke twice in row
 - [X] Add in hook with bird
 - [X] Add in bird talk animation
 - [X] Add in splash page
 - [ ] Add in sound
-    
+
+* Final
+- [ ] Add in credits
+- [ ] Don't repeat jokes
+- [ ] Don't repeat sounds
+- [ ] More jokes
+- [ ] More heckles
+- [ ] Video
+ 
 * Nice to have
+- [ ] Splatter tomatoes
+- [ ] Can't move as soon as hook starts moving back
+- [ ] Never same joke twice in row
 - [ ] Sound
 - [ ] Reverse hook
 - [ ] Animate bird walk

@@ -43,7 +43,22 @@
     },
 
     {
-      "menus": [],
+	"menus": [],
+	"samples": [{"name": "joke1","path":"assets/sounds/CrowJoke1.wav"},
+		    {"name": "joke2","path":"assets/sounds/CrowJoke2.wav"},
+		    {"name": "joke3","path":"assets/sounds/CrowJoke3.wav"},
+		    {"name": "joke4","path":"assets/sounds/CrowJoke4.wav"},
+		    {"name": "joke5","path":"assets/sounds/CrowJoke5.wav"},
+		    {"name": "heckle1","path":"assets/sounds/Peckle1.wav"},
+		    {"name": "heckle2","path":"assets/sounds/Peckle2.wav"},
+		    {"name": "heckle3","path":"assets/sounds/Peckle3.wav"},
+		    {"name": "heckle4","path":"assets/sounds/Peckle4.wav"},
+		    {"name": "heckle5","path":"assets/sounds/Peckle5.wav"},
+		    {"name": "heckle6","path":"assets/sounds/Peckle6.wav"},
+		    {"name": "heckle7","path":"assets/sounds/Peckle7.wav"},
+		    		    {"name": "heckle8","path":"assets/sounds/Peckle8.wav"}
+		    
+			 ],
       "name": "game",
       "targets": [
         {
