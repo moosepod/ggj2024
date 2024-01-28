@@ -6,7 +6,7 @@
 #define DEBOUNCER_DELAY 5
 #define SCREEN_WIDTH 400
 #define AUDIENCE_MEMBER_COUNT 6
-#define HECKLE_COUNT 8
+#define HECKLE_COUNT 8`
 #define JOKE_COUNT 8
 #define SPEECH_BUBBLE_LEN 50
 #define AFTER_JOKE_WAIT_S 2.0
@@ -15,6 +15,8 @@
 #define SCREEN_BOUNDS                                                          \
   (MLIBRect) { 0, 0, 400, 240 }
 #define HOOK_VELOCITY 3
+
+#define MAX_VELOCITY 15
 
 typedef enum {
   STATE_JOKE,
@@ -331,6 +333,18 @@ static void handle_movement(PlaydateAPI *pd, GameSceneContext *gsc,
     move_player(pd, &gsc->player, assets, -1 * gsc->player.velocity);
   } else if ((debounced_buttons & kButtonRight)) {
     move_player(pd, &gsc->player, assets, gsc->player.velocity);
+  }
+
+  if (!pd->system->isCrankDocked()) {
+    float dx = pd->system->getCrankChange();
+    int velocity = MLIB_CLAMP_TO_RANGE((int)abs(dx), 0, MAX_VELOCITY);
+    if (velocity) {
+      if (dx < 0) {
+        move_player(pd, &gsc->player, assets, -1 * velocity);
+      } else {
+        move_player(pd, &gsc->player, assets, velocity);
+      }
+    }
   }
 }
 

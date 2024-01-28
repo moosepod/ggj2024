@@ -23,13 +23,16 @@
 * Prioritize!
 - [X] Hook should pull bird
 - [X] Press A to play again message
+- [X] Figure out use of crank
+- [ ] Splatter tomatoes
+- [ ] Bug where hook went way off edge of screen
+- [ ] Can't move as soon as hook starts moving back
 - [ ] Move velocities to game context, increase as game goes on
-- [ ] Fix speed of projectile
 - [ ] Add a speech bubble triangle
-- [ ] Figure out use of crank
 - [ ] Add mask for heckle speech bubble (not sure why this isn't working)
-  
+- [ ] Never same joke twice in row
 * Nice to have
+- [ ] Sound
 - [ ] Reverse hook
 - [ ] Animate bird walk
 
