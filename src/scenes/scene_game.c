@@ -5,7 +5,7 @@
 #define DEFAULT_BIRD_VELOCITY 5
 #define DEBOUNCER_DELAY 5
 #define SCREEN_WIDTH 400
-#define AUDIENCE_MEMBER_COUNT 7
+#define AUDIENCE_MEMBER_COUNT 6
 #define HECKLE_COUNT 8
 #define JOKE_COUNT 8
 #define SPEECH_BUBBLE_LEN 50
@@ -20,6 +20,7 @@ typedef enum {
   STATE_JOKE,
   STATE_HECKLING,
   STATE_THROWING,
+  STATE_PULLING,
   STATE_GAME_OVER
 } GameState;
 
@@ -49,6 +50,7 @@ typedef struct {
   MLIBSize size;
   bool active;
   bool flipped;
+  bool pull_player;
 } Hook;
 
 typedef struct {
@@ -266,16 +268,11 @@ static void init_audience(PlaydateAPI *pd, GameSceneContext *gsc,
   gsc->audience[4].right = true;
   gsc->audience[4].hook = false;
 
-  gsc->audience[5].speech_location = MLIBPOINT_CREATE(0, 75);
-  gsc->audience[5].throw_location = MLIBPOINT_CREATE(0, gsc->player.location.y);
-  gsc->audience[5].right = false;
-  gsc->audience[5].hook = true;
-
-  gsc->audience[6].speech_location = MLIBPOINT_CREATE(250, 75);
-  gsc->audience[6].throw_location =
+  gsc->audience[5].speech_location = MLIBPOINT_CREATE(250, 75);
+  gsc->audience[5].throw_location =
       MLIBPOINT_CREATE(500, gsc->player.location.y);
-  gsc->audience[6].right = true;
-  gsc->audience[6].hook = true;
+  gsc->audience[5].right = true;
+  gsc->audience[5].hook = true;
 
   gsc->audience_index = 0;
 }
@@ -310,6 +307,8 @@ static void show_speech(GameContext *game, GameAssets *assets, MLIBPoint p,
   pd->graphics->popContext();
 
   pd->sprite->setVisible(assets->speech_bubble_sprite, true);
+  pd->sprite->markDirty(assets->speech_bubble_sprite);
+  pd->sprite->setOpaque(assets->speech_bubble_sprite, false);
   pd->sprite->moveTo(assets->speech_bubble_sprite,
                      p.x + gsc->speech_bubble.size.width / 2,
                      p.y - gsc->speech_bubble.size.height / 2);
@@ -371,21 +370,37 @@ static void update_hook(GameContext *game, GameAssets *assets) {
                                               bounds.y + gsc->player.hitbox.y,
                                               gsc->player.hitbox.width,
                                               gsc->player.hitbox.height))) {
-      hide_hook(game, assets);
-      kill_player(game, assets);
+      gsc->hook.velocity.x *= -2;
+      gsc->hook.location.x += gsc->hook.velocity.x;
+      gsc->hook.pull_player = true;
+      pd->sprite->moveTo(assets->hook_sprite, (int)gsc->hook.location.x,
+                         (int)gsc->hook.location.y);
     } else if (MLIB_POINT_IN_RECT(
                    p, assets->targets[TARGET_GAME_STAGE_CENTER].rect)) {
       gsc->hook.velocity.x *= -2;
       gsc->hook.location.x += gsc->hook.velocity.x;
+      gsc->hook.pull_player = false;
       pd->sprite->moveTo(assets->hook_sprite, (int)gsc->hook.location.x,
                          (int)gsc->hook.location.y);
+      gsc->state = STATE_PULLING;
+
     } else if (MLIB_POINT_IN_RECT(
                    p, assets->targets[TARGET_GAME_STAGE_RIGHT].rect)) {
       hide_hook(game, assets);
-      new_joke(game, assets);
+      if (gsc->hook.pull_player) {
+        kill_player(game, assets);
+      } else {
+        new_joke(game, assets);
+      }
     } else {
       pd->sprite->moveTo(assets->hook_sprite, (int)gsc->hook.location.x,
                          (int)gsc->hook.location.y);
+
+      if (gsc->hook.pull_player) {
+        gsc->player.location.x += gsc->hook.velocity.x;
+        pd->sprite->moveTo(assets->bird_sprite, (int)gsc->player.location.x,
+                           (int)gsc->player.location.y);
+      }
     }
   }
 }
@@ -398,7 +413,6 @@ static void update_state(GameContext *game, GameAssets *assets) {
   case STATE_JOKE:
     if (pd->system->getElapsedTime() > gsc->change_state_time) {
       gsc->audience_index = rand_int_range(0, AUDIENCE_MEMBER_COUNT);
-      gsc->audience_index = AUDIENCE_MEMBER_COUNT - 1;
       if (gsc->audience[gsc->audience_index].hook) {
         gsc->heckle_index = 0;
       } else {
@@ -465,6 +479,7 @@ static void start_hook(GameContext *game, GameAssets *assets, MLIBPoint start,
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
 
   gsc->hook.active = true;
+  gsc->hook.pull_player = false;
   gsc->hook.location = MLIBFPOINT_CREATE(start.x, start.y);
   gsc->hook.velocity = MLIBFPOINT_CREATE(-1 * velocity, 0);
   pd->sprite->moveTo(assets->hook_sprite, start.x, start.y);

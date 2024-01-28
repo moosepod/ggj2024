@@ -21,15 +21,18 @@
 - [X] Hook should stop halfway through stage
 
 * Prioritize!
-- [ ] Reverse hook
-- [ ] Hook should pull bird
-- [ ] Animate bird walk
-- [ ] Add mask for heckle speech bubble
+- [X] Hook should pull bird
+- [ ] Add mask for heckle speech bubble (not sure why this isn't working)
 - [ ] Move velocities to game context, increase as game goes on
 - [ ] Fix speed of projectile
 - [ ] Add a speech bubble triangle
 - [ ] Figure out use of crank
+- [ ] Press A to play again message
   
+* Nice to have
+- [ ] Reverse hook
+- [ ] Animate bird walk
+
 * Other stuff
 - [ ] Add more jokes
 - [ ] Finalize image (get rid of bird 2, etc)

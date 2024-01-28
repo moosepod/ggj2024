@@ -24,6 +24,13 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
                    outerr);
   }
 
+  assets->speech_bubble_mask_image =
+      pd->graphics->loadBitmap("assets/speech_bubble_mask.png", &outerr);
+  if (outerr) {
+    pdlogger_error("init_game_game: error loading image speech_bubble_mask. %s",
+                   outerr);
+  }
+
   assets->background_image =
       pd->graphics->loadBitmap("assets/background2.png", &outerr);
   if (outerr) {
@@ -172,7 +179,7 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
       MLIBRECT_CREATE(180, 90, 40, 20);
 
   assets->targets[TARGET_GAME_STAGE_RIGHT].rect =
-      MLIBRECT_CREATE(400, 90, 40, 20);
+      MLIBRECT_CREATE(450, 90, 40, 20);
 }
 
 static void lifecycle_enter_game(GameContext *game, GameAssets *assets) {
