@@ -175,6 +175,29 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->joke_bubble_sprite, false);
 
+  assets->start_text_image =
+      pd->graphics->loadBitmap("assets/start_text.png", &outerr);
+  if (outerr) {
+    pdlogger_error("init_game_game: error loading image start_text. %s",
+                   outerr);
+  }
+
+  if (!assets->start_text_image) {
+    pdlogger_error("init_game_game: image start_text loaded as null.");
+  }
+
+  assets->start_text_sprite = pd->sprite->newSprite();
+
+  pd->sprite->setImage(assets->start_text_sprite, assets->start_text_image,
+                       kBitmapUnflipped);
+  pd->sprite->setZIndex(assets->start_text_sprite, 5);
+
+  pd->sprite->moveTo(assets->start_text_sprite, 200, 30);
+  pd->sprite->addSprite(assets->start_text_sprite);
+  // Sprite are always invisible when created in init. They will be
+  // made visible during the scene enter/exit code
+  pd->sprite->setVisible(assets->start_text_sprite, false);
+
   assets->targets[TARGET_GAME_STAGE_CENTER].rect =
       MLIBRECT_CREATE(180, 90, 40, 20);
 
@@ -222,6 +245,9 @@ static void lifecycle_exit_game(GameContext *game, GameAssets *assets) {
 
   pd->sprite->setVisible(assets->joke_bubble_sprite, false);
   pdlogger_info("lifecycle.c: .... hiding sprite 'joke_bubble_sprite'");
+
+  pd->sprite->setVisible(assets->start_text_sprite, false);
+  pdlogger_info("lifecycle.c: .... hiding sprite 'start_text_sprite'");
 
   exit_game(game, assets);
 }

@@ -36,6 +36,9 @@ typedef struct {
   LCDBitmap *joke_bubble_image;
   LCDSprite *joke_bubble_sprite;
 
+  LCDBitmap *start_text_image;
+  LCDSprite *start_text_sprite;
+
   LCDBitmap *speech_bubble_base_image;
 
   LCDBitmap *joke_bubble_base_image;

@@ -22,12 +22,12 @@
 
 * Prioritize!
 - [X] Hook should pull bird
-- [ ] Add mask for heckle speech bubble (not sure why this isn't working)
+- [X] Press A to play again message
 - [ ] Move velocities to game context, increase as game goes on
 - [ ] Fix speed of projectile
 - [ ] Add a speech bubble triangle
 - [ ] Figure out use of crank
-- [ ] Press A to play again message
+- [ ] Add mask for heckle speech bubble (not sure why this isn't working)
   
 * Nice to have
 - [ ] Reverse hook

@@ -118,7 +118,20 @@
 	    "background": "white"},
 	  "visible": false,
 	  "zindex": 2
+	  },
+	  	  {
+          "name": "start_text",
+          "position": {
+            "x": 200,
+            "y": 30
+          },
+          "image": {
+            "path": "assets/start_text.png"
+          },  
+	  "visible": false,
+	  "zindex": 5
       }
+
        ]
     }
   ]

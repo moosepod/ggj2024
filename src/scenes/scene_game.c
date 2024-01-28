@@ -34,6 +34,7 @@ typedef struct {
 typedef struct {
   MLIBSize size;
   MLIBPoint location;
+  MLIBPoint start_location;
   MLIBRect hitbox;
   int velocity;
 } Player;
@@ -104,6 +105,7 @@ static void start_hook(GameContext *game, GameAssets *assets, MLIBPoint start,
 static void hide_hook(GameContext *game, GameAssets *assets);
 static void kill_player(GameContext *game, GameAssets *assets);
 static void reset_game(GameContext *game, GameAssets *assets);
+static void start_game(GameContext *game, GameAssets *assets);
 static void new_joke(GameContext *game, GameAssets *assets);
 static void hide_joke(GameContext *game, GameAssets *assets);
 
@@ -136,15 +138,17 @@ GameScene tick_game(GameContext *game, GameAssets *assets,
   PlaydateAPI *pd = game->pd;
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
 
-  if (gsc->state == STATE_GAME_OVER) {
+  switch (gsc->state) {
+  case STATE_GAME_OVER:
     if ((debounced_buttons & kButtonA) || (debounced_buttons & kButtonB)) {
-      reset_game(game, assets);
+      start_game(game, assets);
     }
-  } else {
-    if (gsc->state == STATE_HECKLING || gsc->state == STATE_THROWING) {
-      handle_movement(pd, gsc, debounced_buttons, assets);
-    }
-
+    break;
+  case STATE_HECKLING:
+  case STATE_THROWING:
+    handle_movement(pd, gsc, debounced_buttons, assets);
+  // Fallthrough to default deliberate here
+  default:
     update_tomato(game, assets);
     update_hook(game, assets);
     update_state(game, assets);
@@ -182,6 +186,8 @@ static void init_player(PlaydateAPI *pd, GameSceneContext *gsc,
   pd->sprite->getPosition(assets->bird_sprite, &x, &y);
   gsc->player.location.x = x;
   gsc->player.location.y = y;
+  gsc->player.start_location.x = x;
+  gsc->player.start_location.y = y;
 
   gsc->player.hitbox = MLIBRECT_CREATE(16, 16, 80, 50);
 
@@ -498,17 +504,30 @@ static void hide_hook(GameContext *game, GameAssets *assets) {
 static void kill_player(GameContext *game, GameAssets *assets) {
   PlaydateAPI *pd = game->pd;
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
-  gsc->state = STATE_GAME_OVER;
   pd->sprite->setImageFlip(assets->bird_sprite, kBitmapFlippedY);
+
+  reset_game(game, assets);
 }
 
 static void reset_game(GameContext *game, GameAssets *assets) {
   PlaydateAPI *pd = game->pd;
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
 
-  new_joke(game, assets);
+  gsc->state = STATE_GAME_OVER;
+  pd->sprite->setVisible(assets->start_text_sprite, true);
+}
 
+static void start_game(GameContext *game, GameAssets *assets) {
+  PlaydateAPI *pd = game->pd;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
+
+  gsc->player.location.x = gsc->player.start_location.x;
+  gsc->player.location.y = gsc->player.start_location.y;
+  pd->sprite->moveTo(assets->bird_sprite, gsc->player.location.x,
+                     gsc->player.location.y);
   pd->sprite->setImageFlip(assets->bird_sprite, kBitmapUnflipped);
+  pd->sprite->setVisible(assets->start_text_sprite, false);
+  new_joke(game, assets);
 }
 
 static void new_joke(GameContext *game, GameAssets *assets) {
