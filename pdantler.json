@@ -1,5 +1,5 @@
 {
-    "show_fps": false,
+  "show_fps": false,
   "fonts": [
     {
       "name": "main",
@@ -8,67 +8,93 @@
   ],
   "metadata": {
     "bibliography": {
-      "author": "Moosepod Software", 
-      "bundle_id": "com.moosepod.heckler",
+      "author": "Moosepod Software",
+      "bundle_id": "com.moosepod.pecklers",
       "description": "Survive the hecklers! Made for GGJ2024",
-      "title": "Heckler", 
+      "title": "Pecklers",
       "version": "1.0",
       "build_number": 1
     },
     "build": {
-      "additional_src": [
-      ],
-      "additional_test_src": [
-      ] 
+      "additional_src": [],
+      "additional_test_src": []
     },
-    "default_scene": "game", 
+    "default_scene": "game",
     "log_level": "all"
   },
   "scenes": [
     {
       "menus": [],
-	"name": "game",
-	"targets": [{"name":"stage_center", "rect": {"x":180,"y": 90, "width": 40, "height": 20}},
-		   {"name":"stage_right", "rect": {"x":450,"y": 90, "width": 40, "height": 20}}],
-	"standalone_images": [{"name":"speech_bubble_base","image":{
-	    "path": "assets/speech_bubble.png"}},{
-			      "image": {
+      "name": "game",
+      "targets": [
+        {
+          "name": "stage_center",
+          "rect": {
+            "x": 180,
+            "y": 90,
+            "width": 40,
+            "height": 20
+          }
+        },
+        {
+          "name": "stage_right",
+          "rect": {
+            "x": 450,
+            "y": 90,
+            "width": 40,
+            "height": 20
+          }
+        }
+      ],
+      "standalone_images": [
+        {
+          "name": "speech_bubble_base",
+          "image": {
+            "path": "assets/speech_bubble.png"
+          }
+        },
+        {
+          "image": {
             "path": "assets/large_speech_bubble.png"
-          },  
-		"name": "joke_bubble_base"},
-			      {"image": {"path": "assets/speech_bubble_mask.png"},"name": "speech_bubble_mask"}
-
-      ], 
-
+          },
+          "name": "joke_bubble_base"
+        },
+        {
+          "image": {
+            "path": "assets/speech_bubble_mask.png"
+          },
+          "name": "speech_bubble_mask"
+        }
+      ],
       "sprites": [
         {
           "image": {
             "path": "assets/background2.png"
-          },  
+          },
           "name": "background",
           "position": {
             "x": 200,
-            "y": 120  
+            "y": 120
           },
           "visible": true,
           "zindex": 1
         },
-	  {
+        {
           "image": {
             "path": "assets/bird2.png"
-          },  
+          },
           "name": "bird",
           "position": {
             "x": 200,
-            "y": 100  
+            "y": 100
           },
           "visible": true,
-          "zindex": 2
-          },
-	  {
+          "zindex": 5
+        },
+        {
           "image": {
             "path": "assets/foreground_birds.png"
-          },  
+          },
           "name": "audience",
           "position": {
             "x": 200,
@@ -76,11 +102,11 @@
           },
           "visible": true,
           "zindex": 3
-          },
-	  {
+        },
+        {
           "image": {
             "path": "assets/tomato.png"
-          },  
+          },
           "name": "tomato",
           "position": {
             "x": 50,
@@ -88,11 +114,11 @@
           },
           "visible": false,
           "zindex": 5
-          },
-	  {
+        },
+        {
           "image": {
             "path": "assets/hook.png"
-          },  
+          },
           "name": "hook",
           "position": {
             "x": 50,
@@ -100,26 +126,52 @@
           },
           "visible": false,
           "zindex": 5
+        },
+        {
+          "image": {
+            "path": "assets/hooked_crow.png"
           },
-	  {"name": "speech_bubble",
-	  "position": {"x": 200,"y": 120},
-	  "image": {"size": {"width": 144, "height": 55},
-	    "background": "white"},
-	  "visible": false,
-	  "zindex": 4
-	  },
-	  {
+          "name": "hooked_crow",
+          "position": {
+            "x": 50,
+            "y": 50
+          },
+          "visible": false,
+          "zindex": 5
+        },
+        {
+          "name": "speech_bubble",
+          "position": {
+            "x": 200,
+            "y": 120
+          },
+          "image": {
+            "size": {
+              "width": 144,
+              "height": 55
+            },
+            "background": "white"
+          },
+          "visible": false,
+          "zindex": 4
+        },
+        {
           "name": "joke_bubble",
           "position": {
             "x": 198,
             "y": 30
           },
-	  "image": {"size": {"width": 384, "height": 38},
-	    "background": "white"},
-	  "visible": false,
-	  "zindex": 2
-	  },
-	  	  {
+          "image": {
+            "size": {
+              "width": 384,
+              "height": 38
+            },
+            "background": "white"
+          },
+          "visible": false,
+          "zindex": 2
+        },
+        {
           "name": "start_text",
           "position": {
             "x": 200,
@@ -127,12 +179,11 @@
           },
           "image": {
             "path": "assets/start_text.png"
-          },  
-	  "visible": false,
-	  "zindex": 5
-      }
-
-       ]
+          },
+          "visible": false,
+          "zindex": 5
+        }
+      ]
     }
   ]
 }

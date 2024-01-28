@@ -24,17 +24,23 @@
 - [X] Hook should pull bird
 - [X] Press A to play again message
 - [X] Figure out use of crank
+- [X] Add in new hook animation
+- [X] Move velocities to game context, increase as game goes on
+- [X] Bug where hook went way off edge of screen
 - [ ] Splatter tomatoes
-- [ ] Bug where hook went way off edge of screen
 - [ ] Can't move as soon as hook starts moving back
-- [ ] Move velocities to game context, increase as game goes on
-- [ ] Add a speech bubble triangle
-- [ ] Add mask for heckle speech bubble (not sure why this isn't working)
 - [ ] Never same joke twice in row
+- [X] Add in hook with bird
+- [ ] Add in bird talk animation
+- [ ] Add in splash page
+- [ ] Add in sound
+    
 * Nice to have
 - [ ] Sound
 - [ ] Reverse hook
 - [ ] Animate bird walk
+- [ ] Add a speech bubble triangle
+- [ ] Add mask for heckle speech bubble (not sure why this isn't working)
 
 * Other stuff
 - [ ] Add more jokes

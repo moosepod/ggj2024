@@ -30,6 +30,9 @@ typedef struct {
   LCDBitmap *hook_image;
   LCDSprite *hook_sprite;
 
+  LCDBitmap *hooked_crow_image;
+  LCDSprite *hooked_crow_sprite;
+
   LCDBitmap *speech_bubble_image;
   LCDSprite *speech_bubble_sprite;
 

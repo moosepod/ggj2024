@@ -6,15 +6,18 @@
 #define DEBOUNCER_DELAY 5
 #define SCREEN_WIDTH 400
 #define AUDIENCE_MEMBER_COUNT 6
-#define HECKLE_COUNT 8`
+#define HECKLE_COUNT 8
 #define JOKE_COUNT 8
+#define AFTER_JOKE_WAIT_S 3.0
 #define SPEECH_BUBBLE_LEN 50
-#define AFTER_JOKE_WAIT_S 2.0
-#define HECKLE_S 2.0
-#define AFTER_THROW_WAIT_S 2.0
+#define INITIAL_HECKLE_S 2.0
 #define SCREEN_BOUNDS                                                          \
   (MLIBRect) { 0, 0, 400, 240 }
-#define HOOK_VELOCITY 3
+#define INITIAL_HOOK_VELOCITY 2.0f
+#define INITIAL_TOMATO_VELOCITY 5.0f
+#define HOOK_VELOCITY_INCREMENT 0.5f
+#define TOMATO_VELOCITY_INCREMENT 0.5f
+#define HECKLE_WAIT_INCREMENT 0.05f
 
 #define MAX_VELOCITY 15
 
@@ -76,6 +79,9 @@ typedef struct {
   float change_state_time;
   MLIBPoint player_location_bookmark;
   GameState state;
+  float current_hook_velocity;
+  float current_tomato_velocity;
+  float current_heckle_wait;
 } GameSceneContext;
 
 static void move_player(PlaydateAPI *pd, Player *player, GameAssets *assets,
@@ -100,7 +106,7 @@ static void handle_movement(PlaydateAPI *pd, GameSceneContext *gsc,
                             PDButtons debounced_buttons, GameAssets *assets);
 
 static void throw_tomato(GameContext *game, GameAssets *assets, MLIBPoint start,
-                         MLIBPoint end, int steps);
+                         MLIBPoint end, float velocity);
 static void hide_tomato(GameContext *game, GameAssets *assets);
 static void start_hook(GameContext *game, GameAssets *assets, MLIBPoint start,
                        MLIBPoint end, int velocity);
@@ -278,7 +284,7 @@ static void init_audience(PlaydateAPI *pd, GameSceneContext *gsc,
 
   gsc->audience[5].speech_location = MLIBPOINT_CREATE(250, 75);
   gsc->audience[5].throw_location =
-      MLIBPOINT_CREATE(500, gsc->player.location.y);
+      MLIBPOINT_CREATE(550, gsc->player.location.y);
   gsc->audience[5].right = true;
   gsc->audience[5].hook = true;
 
@@ -390,10 +396,14 @@ static void update_hook(GameContext *game, GameAssets *assets) {
                                               bounds.y + gsc->player.hitbox.y,
                                               gsc->player.hitbox.width,
                                               gsc->player.hitbox.height))) {
-      gsc->hook.velocity.x *= -2;
+      gsc->hook.velocity.x *= -1;
       gsc->hook.location.x += gsc->hook.velocity.x;
       gsc->hook.pull_player = true;
-      pd->sprite->moveTo(assets->hook_sprite, (int)gsc->hook.location.x,
+      gsc->state = STATE_PULLING;
+      pd->sprite->setVisible(assets->hooked_crow_sprite, true);
+      pd->sprite->setVisible(assets->hook_sprite, false);
+      pd->sprite->setVisible(assets->bird_sprite, false);
+      pd->sprite->moveTo(assets->hooked_crow_sprite, (int)gsc->hook.location.x,
                          (int)gsc->hook.location.y);
     } else if (MLIB_POINT_IN_RECT(
                    p, assets->targets[TARGET_GAME_STAGE_CENTER].rect)) {
@@ -402,8 +412,6 @@ static void update_hook(GameContext *game, GameAssets *assets) {
       gsc->hook.pull_player = false;
       pd->sprite->moveTo(assets->hook_sprite, (int)gsc->hook.location.x,
                          (int)gsc->hook.location.y);
-      gsc->state = STATE_PULLING;
-
     } else if (MLIB_POINT_IN_RECT(
                    p, assets->targets[TARGET_GAME_STAGE_RIGHT].rect)) {
       hide_hook(game, assets);
@@ -413,13 +421,13 @@ static void update_hook(GameContext *game, GameAssets *assets) {
         new_joke(game, assets);
       }
     } else {
-      pd->sprite->moveTo(assets->hook_sprite, (int)gsc->hook.location.x,
-                         (int)gsc->hook.location.y);
-
       if (gsc->hook.pull_player) {
-        gsc->player.location.x += gsc->hook.velocity.x;
-        pd->sprite->moveTo(assets->bird_sprite, (int)gsc->player.location.x,
-                           (int)gsc->player.location.y);
+        pd->sprite->moveTo(assets->hooked_crow_sprite,
+                           (int)gsc->hook.location.x,
+                           (int)gsc->hook.location.y);
+      } else {
+        pd->sprite->moveTo(assets->hook_sprite, (int)gsc->hook.location.x,
+                           (int)gsc->hook.location.y);
       }
     }
   }
@@ -444,7 +452,7 @@ static void update_state(GameContext *game, GameAssets *assets) {
                   gsc->heckles[gsc->heckle_index],
                   !gsc->audience[gsc->audience_index].right);
 
-      gsc->change_state_time = HECKLE_S;
+      gsc->change_state_time = gsc->current_heckle_wait;
       gsc->state = STATE_HECKLING;
       pd->system->resetElapsedTime();
       gsc->player_location_bookmark = gsc->player.location;
@@ -458,11 +466,11 @@ static void update_state(GameContext *game, GameAssets *assets) {
       if (gsc->audience[gsc->audience_index].hook) {
         start_hook(game, assets,
                    gsc->audience[gsc->audience_index].throw_location,
-                   gsc->player_location_bookmark, HOOK_VELOCITY);
+                   gsc->player_location_bookmark, gsc->current_hook_velocity);
       } else {
-        throw_tomato(game, assets,
-                     gsc->audience[gsc->audience_index].throw_location,
-                     gsc->player_location_bookmark, 20);
+        throw_tomato(
+            game, assets, gsc->audience[gsc->audience_index].throw_location,
+            gsc->player_location_bookmark, gsc->current_tomato_velocity);
       }
     }
     break;
@@ -472,17 +480,20 @@ static void update_state(GameContext *game, GameAssets *assets) {
 }
 
 static void throw_tomato(GameContext *game, GameAssets *assets, MLIBPoint start,
-                         MLIBPoint end, int steps) {
+                         MLIBPoint end, float velocity) {
   PlaydateAPI *pd = game->pd;
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
 
   gsc->tomato.active = true;
   gsc->tomato.location = MLIBFPOINT_CREATE(start.x, start.y);
-  gsc->tomato.velocity =
-      MLIBFPOINT_CREATE((end.x - start.x) / steps, (end.y - start.y) / steps);
+  MLIBSize s = MLIBSIZE_CREATE(end.x - start.x, end.y - start.y);
+  float m = sqrt(s.width * s.width + s.height * s.height);
+  MLIBFPoint v = MLIBFPOINT_CREATE((float)s.width / m, (float)s.height / m);
+  gsc->tomato.velocity = MLIBFPOINT_CREATE(velocity * v.x, velocity * v.y);
   pd->sprite->moveTo(assets->tomato_sprite, start.x, start.y);
   pd->sprite->setVisible(assets->tomato_sprite, true);
 
+  gsc->current_tomato_velocity += TOMATO_VELOCITY_INCREMENT;
   gsc->state = STATE_THROWING;
 }
 
@@ -504,7 +515,7 @@ static void start_hook(GameContext *game, GameAssets *assets, MLIBPoint start,
   gsc->hook.velocity = MLIBFPOINT_CREATE(-1 * velocity, 0);
   pd->sprite->moveTo(assets->hook_sprite, start.x, start.y);
   pd->sprite->setVisible(assets->hook_sprite, true);
-
+  gsc->current_hook_velocity += HOOK_VELOCITY_INCREMENT;
   gsc->state = STATE_THROWING;
 }
 
@@ -513,6 +524,7 @@ static void hide_hook(GameContext *game, GameAssets *assets) {
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
   gsc->hook.active = false;
   pd->sprite->setVisible(assets->hook_sprite, false);
+  pd->sprite->setVisible(assets->hooked_crow_sprite, false);
 }
 
 static void kill_player(GameContext *game, GameAssets *assets) {
@@ -541,6 +553,11 @@ static void start_game(GameContext *game, GameAssets *assets) {
                      gsc->player.location.y);
   pd->sprite->setImageFlip(assets->bird_sprite, kBitmapUnflipped);
   pd->sprite->setVisible(assets->start_text_sprite, false);
+  pd->sprite->setVisible(assets->bird_sprite, true);
+
+  gsc->current_hook_velocity = INITIAL_HOOK_VELOCITY;
+  gsc->current_tomato_velocity = INITIAL_TOMATO_VELOCITY;
+  gsc->current_heckle_wait = INITIAL_HECKLE_S;
   new_joke(game, assets);
 }
 
@@ -564,6 +581,7 @@ static void new_joke(GameContext *game, GameAssets *assets) {
                          10);
   pd->graphics->popContext();
   pd->sprite->setVisible(assets->joke_bubble_sprite, true);
+  gsc->current_heckle_wait -= HECKLE_WAIT_INCREMENT;
 }
 
 static void hide_joke(GameContext *game, GameAssets *assets) {

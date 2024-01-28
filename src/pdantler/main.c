@@ -25,7 +25,7 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 
   if (event == kEventInit) {
     pdlogger_register_appender(&pd_appender, pd);
-    pdlogger_info("eventHandler: Starting Heckler build number %s",
+    pdlogger_info("eventHandler: Starting Pecklers build number %s",
                   BUILD_NUMBER);
 
     PlaydateMRLMemCtx *mem_ctx =

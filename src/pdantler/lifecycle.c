@@ -67,7 +67,7 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
 
   pd->sprite->setImage(assets->bird_sprite, assets->bird_image,
                        kBitmapUnflipped);
-  pd->sprite->setZIndex(assets->bird_sprite, 2);
+  pd->sprite->setZIndex(assets->bird_sprite, 5);
 
   pd->sprite->moveTo(assets->bird_sprite, 200, 100);
   pd->sprite->addSprite(assets->bird_sprite);
@@ -138,6 +138,29 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // Sprite are always invisible when created in init. They will be
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->hook_sprite, false);
+
+  assets->hooked_crow_image =
+      pd->graphics->loadBitmap("assets/hooked_crow.png", &outerr);
+  if (outerr) {
+    pdlogger_error("init_game_game: error loading image hooked_crow. %s",
+                   outerr);
+  }
+
+  if (!assets->hooked_crow_image) {
+    pdlogger_error("init_game_game: image hooked_crow loaded as null.");
+  }
+
+  assets->hooked_crow_sprite = pd->sprite->newSprite();
+
+  pd->sprite->setImage(assets->hooked_crow_sprite, assets->hooked_crow_image,
+                       kBitmapUnflipped);
+  pd->sprite->setZIndex(assets->hooked_crow_sprite, 5);
+
+  pd->sprite->moveTo(assets->hooked_crow_sprite, 50, 50);
+  pd->sprite->addSprite(assets->hooked_crow_sprite);
+  // Sprite are always invisible when created in init. They will be
+  // made visible during the scene enter/exit code
+  pd->sprite->setVisible(assets->hooked_crow_sprite, false);
 
   assets->speech_bubble_image = pd->graphics->newBitmap(144, 55, kColorWhite);
 
@@ -239,6 +262,9 @@ static void lifecycle_exit_game(GameContext *game, GameAssets *assets) {
 
   pd->sprite->setVisible(assets->hook_sprite, false);
   pdlogger_info("lifecycle.c: .... hiding sprite 'hook_sprite'");
+
+  pd->sprite->setVisible(assets->hooked_crow_sprite, false);
+  pdlogger_info("lifecycle.c: .... hiding sprite 'hooked_crow_sprite'");
 
   pd->sprite->setVisible(assets->speech_bubble_sprite, false);
   pdlogger_info("lifecycle.c: .... hiding sprite 'speech_bubble_sprite'");

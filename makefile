@@ -10,7 +10,7 @@ export PLAYDATE_SDK_PATH = /home/mchristensen/src/PlaydateSDK-2.2.0
 HEAP_SIZE      = 8388208
 STACK_SIZE     = 61800
 
-PRODUCT = Heckler.pdx
+PRODUCT = Pecklers.pdx
 
 # Locate the SDK
 SDK = ${PLAYDATE_SDK_PATH}

@@ -55,6 +55,7 @@ Mkfile.old
 dkms.confy
 
 Heckler.pdx/**
+Pecklers.pdx/**
 playdate/build/**
 playdate/*.pdx/**
 **/*.bin
