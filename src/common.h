@@ -10,6 +10,7 @@
 #include <stdbool.h>
 
 #define MOOSELIB_PLAYDATE
+#define PDANTLER_MAX_NAME_LEN 50
 
 // Need to use playdate realloc functions here
 typedef struct {
@@ -39,6 +40,11 @@ typedef enum {
   SCENE_GAME
 
 } GameScene;
+
+typedef struct {
+  char name[PDANTLER_MAX_NAME_LEN];
+  MLIBRect rect;
+} Target;
 
 typedef enum { CHANNEL_MUSIC, CHANNEL_SFX_1, CHANNEL_SFX_2 } GameSampleChannel;
 

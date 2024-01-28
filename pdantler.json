@@ -28,6 +28,8 @@
     {
       "menus": [],
 	"name": "game",
+	"targets": [{"name":"stage_center", "rect": {"x":180,"y": 90, "width": 40, "height": 20}},
+		   {"name":"stage_right", "rect": {"x":400,"y": 90, "width": 40, "height": 20}}],
 	"standalone_images": [{"name":"speech_bubble_base","image":{
 	    "path": "assets/speech_bubble.png"}},{
 			      "image": {

@@ -5,6 +5,14 @@
 
 #include "../common.h"
 
+#define GAME_TARGET_COUNT 2
+
+typedef enum {
+  TARGET_GAME_STAGE_CENTER,
+  TARGET_GAME_STAGE_RIGHT
+
+} GameTargets;
+
 typedef struct {
 
   LCDBitmap *background_image;
@@ -32,6 +40,7 @@ typedef struct {
 
   LCDBitmap *joke_bubble_base_image;
 
+  Target targets[GAME_TARGET_COUNT];
 } GameAssets;
 
 extern void init_game(GameContext *game, GameAssets *assets);

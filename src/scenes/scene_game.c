@@ -14,8 +14,6 @@
 #define AFTER_THROW_WAIT_S 2.0
 #define SCREEN_BOUNDS                                                          \
   (MLIBRect) { 0, 0, 400, 240 }
-#define STAGE_CENTER                                                           \
-  (MLIBRect) { 180, 90, 40, 20 }
 #define HOOK_VELOCITY 3
 
 typedef enum {
@@ -375,12 +373,14 @@ static void update_hook(GameContext *game, GameAssets *assets) {
                                               gsc->player.hitbox.height))) {
       hide_hook(game, assets);
       kill_player(game, assets);
-    } else if (MLIB_POINT_IN_RECT(p, STAGE_CENTER)) {
+    } else if (MLIB_POINT_IN_RECT(
+                   p, assets->targets[TARGET_GAME_STAGE_CENTER].rect)) {
       gsc->hook.velocity.x *= -2;
       gsc->hook.location.x += gsc->hook.velocity.x;
       pd->sprite->moveTo(assets->hook_sprite, (int)gsc->hook.location.x,
                          (int)gsc->hook.location.y);
-    } else if (p.x > SCREEN_WIDTH) {
+    } else if (MLIB_POINT_IN_RECT(
+                   p, assets->targets[TARGET_GAME_STAGE_RIGHT].rect)) {
       hide_hook(game, assets);
       new_joke(game, assets);
     } else {

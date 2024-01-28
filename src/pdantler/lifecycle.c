@@ -167,6 +167,12 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // Sprite are always invisible when created in init. They will be
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->joke_bubble_sprite, false);
+
+  assets->targets[TARGET_GAME_STAGE_CENTER].rect =
+      MLIBRECT_CREATE(180, 90, 40, 20);
+
+  assets->targets[TARGET_GAME_STAGE_RIGHT].rect =
+      MLIBRECT_CREATE(400, 90, 40, 20);
 }
 
 static void lifecycle_enter_game(GameContext *game, GameAssets *assets) {
