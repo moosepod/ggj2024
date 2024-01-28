@@ -16,18 +16,24 @@
 - [X] Fix offsets for tomato launch  
 - [X] Fix speed
 - [X] Randomize
-- [ ] Add a speech bubble triangle
-- [ ] Can't move while telling joke
+- [X] Can't move while telling joke
+- [X] Add hook
+- [X] Hook should stop halfway through stage
+
+* Prioritize!
+- [ ] Reverse hook
+- [ ] Hook should pull bird
+- [ ] Animate bird walk
+- [ ] Add mask for heckle speech bubble
+- [ ] Move velocities to game context, increase as game goes on
 - [ ] Fix speed of projectile
-- [ ] Add hook
+- [ ] Add a speech bubble triangle
+- [ ] Figure out use of crank
   
 * Other stuff
+- [ ] Add more jokes
 - [ ] Finalize image (get rid of bird 2, etc)
-- [ ] Figure out use of crank with d-pad
-- [ ] Show jokes over heads of users
-- [ ] Throw tomatoes from users
 - [ ] Timer?
-- [ ] Add collision detection
 - [ ] Add a count-up timer
 - [ ] Add a get ready/win/loss state
 - [ ] Tomato "splat" on back

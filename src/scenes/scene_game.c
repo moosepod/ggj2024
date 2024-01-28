@@ -5,8 +5,8 @@
 #define DEFAULT_BIRD_VELOCITY 5
 #define DEBOUNCER_DELAY 5
 #define SCREEN_WIDTH 400
-#define AUDIENCE_MEMBER_COUNT 5
-#define HECKLE_COUNT 7
+#define AUDIENCE_MEMBER_COUNT 7
+#define HECKLE_COUNT 8
 #define JOKE_COUNT 8
 #define SPEECH_BUBBLE_LEN 50
 #define AFTER_JOKE_WAIT_S 2.0
@@ -14,6 +14,9 @@
 #define AFTER_THROW_WAIT_S 2.0
 #define SCREEN_BOUNDS                                                          \
   (MLIBRect) { 0, 0, 400, 240 }
+#define STAGE_CENTER                                                           \
+  (MLIBRect) { 180, 90, 40, 20 }
+#define HOOK_VELOCITY 3
 
 typedef enum {
   STATE_JOKE,
@@ -26,6 +29,7 @@ typedef struct {
   MLIBPoint speech_location;
   MLIBPoint throw_location;
   bool right;
+  bool hook;
 } AudienceMember;
 
 typedef struct {
@@ -42,6 +46,14 @@ typedef struct {
 } Tomato;
 
 typedef struct {
+  MLIBFPoint location;
+  MLIBFPoint velocity;
+  MLIBSize size;
+  bool active;
+  bool flipped;
+} Hook;
+
+typedef struct {
   char line1[SPEECH_BUBBLE_LEN];
   MLIBSize size;
   bool flipped;
@@ -52,6 +64,7 @@ typedef struct {
   SpeechBubble speech_bubble;
   AudienceMember audience[AUDIENCE_MEMBER_COUNT];
   Tomato tomato;
+  Hook hook;
   int audience_index;
   char *heckles[HECKLE_COUNT];
   char *jokes[JOKE_COUNT];
@@ -79,12 +92,16 @@ static void show_speech(GameContext *game, GameAssets *assets, MLIBPoint p,
 static void hide_speech(GameContext *game, GameAssets *assets);
 static void update_state(GameContext *game, GameAssets *assets);
 static void update_tomato(GameContext *game, GameAssets *assets);
+static void update_hook(GameContext *game, GameAssets *assets);
 static void handle_movement(PlaydateAPI *pd, GameSceneContext *gsc,
                             PDButtons debounced_buttons, GameAssets *assets);
 
 static void throw_tomato(GameContext *game, GameAssets *assets, MLIBPoint start,
                          MLIBPoint end, int steps);
 static void hide_tomato(GameContext *game, GameAssets *assets);
+static void start_hook(GameContext *game, GameAssets *assets, MLIBPoint start,
+                       MLIBPoint end, int velocity);
+static void hide_hook(GameContext *game, GameAssets *assets);
 static void kill_player(GameContext *game, GameAssets *assets);
 static void reset_game(GameContext *game, GameAssets *assets);
 static void new_joke(GameContext *game, GameAssets *assets);
@@ -106,6 +123,7 @@ void init_game(GameContext *game, GameAssets *assets) {
   init_audience(pd, gsc, assets);
   init_speech_bubble(pd, gsc, assets);
   init_jokes(pd, gsc, assets);
+  init_misc(pd, gsc, assets);
 
   reset_game(game, assets);
 }
@@ -123,8 +141,12 @@ GameScene tick_game(GameContext *game, GameAssets *assets,
       reset_game(game, assets);
     }
   } else {
-    handle_movement(pd, gsc, debounced_buttons, assets);
+    if (gsc->state == STATE_HECKLING || gsc->state == STATE_THROWING) {
+      handle_movement(pd, gsc, debounced_buttons, assets);
+    }
+
     update_tomato(game, assets);
+    update_hook(game, assets);
     update_state(game, assets);
   }
 
@@ -172,10 +194,10 @@ static void init_misc(PlaydateAPI *pd, GameSceneContext *gsc,
   srand(pd->system->getCurrentTimeMilliseconds());
 
   gsc->tomato.active = false;
+  gsc->hook.active = false;
 
-  int width, height;
-  pd->graphics->getBitmapData(assets->tomato_image, &width, &height, NULL, NULL,
-                              NULL);
+  pd->graphics->getBitmapData(assets->hook_image, &gsc->hook.size.width,
+                              &gsc->hook.size.height, NULL, NULL, NULL);
 }
 
 static void init_speech_bubble(PlaydateAPI *pd, GameSceneContext *gsc,
@@ -185,6 +207,7 @@ static void init_speech_bubble(PlaydateAPI *pd, GameSceneContext *gsc,
       &gsc->speech_bubble.size.height, NULL, NULL, NULL);
 
   gsc->heckle_index = 0;
+  gsc->heckles[gsc->heckle_index++] = "Get off the stage!";
   gsc->heckles[gsc->heckle_index++] = "Booooo!";
   gsc->heckles[gsc->heckle_index++] = "Get new material!";
   gsc->heckles[gsc->heckle_index++] = "You suck!";
@@ -223,22 +246,38 @@ static void init_audience(PlaydateAPI *pd, GameSceneContext *gsc,
   gsc->audience[0].speech_location = MLIBPOINT_CREATE(45, 200);
   gsc->audience[0].throw_location = MLIBPOINT_CREATE(69, 178);
   gsc->audience[0].right = false;
+  gsc->audience[0].hook = false;
 
   gsc->audience[1].speech_location = MLIBPOINT_CREATE(130, 200);
   gsc->audience[1].throw_location = MLIBPOINT_CREATE(178, 168);
   gsc->audience[1].right = false;
+  gsc->audience[1].hook = false;
 
   gsc->audience[2].speech_location = MLIBPOINT_CREATE(200, 200);
   gsc->audience[2].throw_location = MLIBPOINT_CREATE(199, 187);
   gsc->audience[2].right = false;
+  gsc->audience[2].hook = false;
 
   gsc->audience[3].speech_location = MLIBPOINT_CREATE(128, 200);
   gsc->audience[3].throw_location = MLIBPOINT_CREATE(275, 175);
   gsc->audience[3].right = true;
+  gsc->audience[3].hook = false;
 
   gsc->audience[4].speech_location = MLIBPOINT_CREATE(190, 200);
   gsc->audience[4].throw_location = MLIBPOINT_CREATE(312, 140);
   gsc->audience[4].right = true;
+  gsc->audience[4].hook = false;
+
+  gsc->audience[5].speech_location = MLIBPOINT_CREATE(0, 75);
+  gsc->audience[5].throw_location = MLIBPOINT_CREATE(0, gsc->player.location.y);
+  gsc->audience[5].right = false;
+  gsc->audience[5].hook = true;
+
+  gsc->audience[6].speech_location = MLIBPOINT_CREATE(250, 75);
+  gsc->audience[6].throw_location =
+      MLIBPOINT_CREATE(500, gsc->player.location.y);
+  gsc->audience[6].right = true;
+  gsc->audience[6].hook = true;
 
   gsc->audience_index = 0;
 }
@@ -318,6 +357,39 @@ static void update_tomato(GameContext *game, GameAssets *assets) {
     }
   }
 }
+
+static void update_hook(GameContext *game, GameAssets *assets) {
+  PlaydateAPI *pd = game->pd;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
+  if (gsc->hook.active) {
+    gsc->hook.location.x += gsc->hook.velocity.x;
+
+    MLIBPoint p =
+        MLIBPOINT_CREATE(gsc->hook.location.x - (gsc->hook.size.width / 2),
+                         gsc->hook.location.y);
+
+    PDRect bounds = pd->sprite->getBounds(assets->bird_sprite);
+    if (MLIB_POINT_IN_RECT(p, MLIBRECT_CREATE(bounds.x + gsc->player.hitbox.x,
+                                              bounds.y + gsc->player.hitbox.y,
+                                              gsc->player.hitbox.width,
+                                              gsc->player.hitbox.height))) {
+      hide_hook(game, assets);
+      kill_player(game, assets);
+    } else if (MLIB_POINT_IN_RECT(p, STAGE_CENTER)) {
+      gsc->hook.velocity.x *= -2;
+      gsc->hook.location.x += gsc->hook.velocity.x;
+      pd->sprite->moveTo(assets->hook_sprite, (int)gsc->hook.location.x,
+                         (int)gsc->hook.location.y);
+    } else if (p.x > SCREEN_WIDTH) {
+      hide_hook(game, assets);
+      new_joke(game, assets);
+    } else {
+      pd->sprite->moveTo(assets->hook_sprite, (int)gsc->hook.location.x,
+                         (int)gsc->hook.location.y);
+    }
+  }
+}
+
 static void update_state(GameContext *game, GameAssets *assets) {
   PlaydateAPI *pd = game->pd;
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
@@ -326,7 +398,12 @@ static void update_state(GameContext *game, GameAssets *assets) {
   case STATE_JOKE:
     if (pd->system->getElapsedTime() > gsc->change_state_time) {
       gsc->audience_index = rand_int_range(0, AUDIENCE_MEMBER_COUNT);
-      gsc->heckle_index = rand_int_range(0, HECKLE_COUNT);
+      gsc->audience_index = AUDIENCE_MEMBER_COUNT - 1;
+      if (gsc->audience[gsc->audience_index].hook) {
+        gsc->heckle_index = 0;
+      } else {
+        gsc->heckle_index = rand_int_range(1, HECKLE_COUNT);
+      }
 
       show_speech(game, assets,
                   gsc->audience[gsc->audience_index].speech_location,
@@ -344,9 +421,15 @@ static void update_state(GameContext *game, GameAssets *assets) {
     if (pd->system->getElapsedTime() > gsc->change_state_time) {
       hide_speech(game, assets);
 
-      throw_tomato(game, assets,
+      if (gsc->audience[gsc->audience_index].hook) {
+        start_hook(game, assets,
                    gsc->audience[gsc->audience_index].throw_location,
-                   gsc->player_location_bookmark, 20);
+                   gsc->player_location_bookmark, HOOK_VELOCITY);
+      } else {
+        throw_tomato(game, assets,
+                     gsc->audience[gsc->audience_index].throw_location,
+                     gsc->player_location_bookmark, 20);
+      }
     }
     break;
   default:
@@ -374,6 +457,27 @@ static void hide_tomato(GameContext *game, GameAssets *assets) {
   GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
   gsc->tomato.active = false;
   pd->sprite->setVisible(assets->tomato_sprite, false);
+}
+
+static void start_hook(GameContext *game, GameAssets *assets, MLIBPoint start,
+                       MLIBPoint end, int velocity) {
+  PlaydateAPI *pd = game->pd;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
+
+  gsc->hook.active = true;
+  gsc->hook.location = MLIBFPOINT_CREATE(start.x, start.y);
+  gsc->hook.velocity = MLIBFPOINT_CREATE(-1 * velocity, 0);
+  pd->sprite->moveTo(assets->hook_sprite, start.x, start.y);
+  pd->sprite->setVisible(assets->hook_sprite, true);
+
+  gsc->state = STATE_THROWING;
+}
+
+static void hide_hook(GameContext *game, GameAssets *assets) {
+  PlaydateAPI *pd = game->pd;
+  GameSceneContext *gsc = (GameSceneContext *)game->game_userdata;
+  gsc->hook.active = false;
+  pd->sprite->setVisible(assets->hook_sprite, false);
 }
 
 static void kill_player(GameContext *game, GameAssets *assets) {

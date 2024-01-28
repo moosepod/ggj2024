@@ -19,6 +19,9 @@ typedef struct {
   LCDBitmap *tomato_image;
   LCDSprite *tomato_sprite;
 
+  LCDBitmap *hook_image;
+  LCDSprite *hook_sprite;
+
   LCDBitmap *speech_bubble_image;
   LCDSprite *speech_bubble_sprite;
 

@@ -85,6 +85,18 @@
           "visible": false,
           "zindex": 5
           },
+	  {
+          "image": {
+            "path": "assets/hook.png"
+          },  
+          "name": "hook",
+          "position": {
+            "x": 50,
+            "y": 50
+          },
+          "visible": false,
+          "zindex": 5
+          },
 	  {"name": "speech_bubble",
 	  "position": {"x": 200,"y": 120},
 	  "image": {"size": {"width": 144, "height": 55},

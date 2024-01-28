@@ -111,6 +111,27 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
   // made visible during the scene enter/exit code
   pd->sprite->setVisible(assets->tomato_sprite, false);
 
+  assets->hook_image = pd->graphics->loadBitmap("assets/hook.png", &outerr);
+  if (outerr) {
+    pdlogger_error("init_game_game: error loading image hook. %s", outerr);
+  }
+
+  if (!assets->hook_image) {
+    pdlogger_error("init_game_game: image hook loaded as null.");
+  }
+
+  assets->hook_sprite = pd->sprite->newSprite();
+
+  pd->sprite->setImage(assets->hook_sprite, assets->hook_image,
+                       kBitmapUnflipped);
+  pd->sprite->setZIndex(assets->hook_sprite, 5);
+
+  pd->sprite->moveTo(assets->hook_sprite, 50, 50);
+  pd->sprite->addSprite(assets->hook_sprite);
+  // Sprite are always invisible when created in init. They will be
+  // made visible during the scene enter/exit code
+  pd->sprite->setVisible(assets->hook_sprite, false);
+
   assets->speech_bubble_image = pd->graphics->newBitmap(144, 55, kColorWhite);
 
   if (!assets->speech_bubble_image) {
@@ -179,6 +200,9 @@ static void lifecycle_exit_game(GameContext *game, GameAssets *assets) {
 
   pd->sprite->setVisible(assets->tomato_sprite, false);
   pdlogger_info("lifecycle.c: .... hiding sprite 'tomato_sprite'");
+
+  pd->sprite->setVisible(assets->hook_sprite, false);
+  pdlogger_info("lifecycle.c: .... hiding sprite 'hook_sprite'");
 
   pd->sprite->setVisible(assets->speech_bubble_sprite, false);
   pdlogger_info("lifecycle.c: .... hiding sprite 'speech_bubble_sprite'");
