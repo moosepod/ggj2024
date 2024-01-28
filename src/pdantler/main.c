@@ -73,7 +73,6 @@ static int update(void *userdata) {
   }
 
   pd->sprite->updateAndDrawSprites();
-  pd->system->drawFPS(0, 0);
 
   return 1;
 }
