@@ -19,10 +19,29 @@
       "additional_src": [],
       "additional_test_src": []
     },
-    "default_scene": "game",
+    "default_scene": "splash",
     "log_level": "all"
   },
-  "scenes": [
+    "scenes": [
+	    {
+      "menus": [],
+      "name": "splash",
+      "sprites": [
+        {
+          "image": {
+            "path": "assets/splash.png"
+          },  
+          "name": "splash",
+          "position": {
+            "x": 200,
+            "y": 120  
+          },
+          "visible": true,
+          "zindex": 1
+        }
+      ]
+    },
+
     {
       "menus": [],
       "name": "game",

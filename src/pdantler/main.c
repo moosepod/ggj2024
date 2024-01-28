@@ -7,6 +7,7 @@
 #include "../common.h"
 
 #include "src/scenes/scene_game.h"
+#include "src/scenes/scene_splash.h"
 
 extern void lifecycle_init_game(GameContext *context);
 extern PDButtons pdantler_debounce_input(PlaydateAPI *pd, Debouncer *debouncer);
@@ -60,6 +61,10 @@ static int update(void *userdata) {
 
   switch (game->current_scene) {
 
+  case SCENE_SPLASH:
+    next_scene = tick_splash(game, (SplashAssets *)game->splash_assets,
+                             debounced_buttons, delta);
+    break;
   case SCENE_GAME:
     next_scene = tick_game(game, (GameAssets *)game->game_assets,
                            debounced_buttons, delta);

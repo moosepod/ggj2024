@@ -35,7 +35,7 @@ build/src/pdantler/lifecycle.o: src/pdantler/lifecycle.c \
  /usr/include/newlib/sys/timespec.h /usr/include/newlib/sys/_timespec.h \
  /usr/include/newlib/sys/_pthreadtypes.h /usr/include/newlib/sys/sched.h \
  /usr/include/newlib/machine/types.h /usr/include/newlib/sys/stdio.h \
- src/scenes/scene_game.h src/scenes/../common.h
+ src/scenes/scene_game.h src/scenes/../common.h src/scenes/scene_splash.h
 src/pdantler/../common.h:
 /home/mchristensen/src/PlaydateSDK-2.2.0/C_API/pd_api.h:
 /usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h:
@@ -90,3 +90,4 @@ src/pdantler/../pdantler/mooselib.h:
 /usr/include/newlib/sys/stdio.h:
 src/scenes/scene_game.h:
 src/scenes/../common.h:
+src/scenes/scene_splash.h:

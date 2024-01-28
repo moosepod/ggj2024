@@ -37,6 +37,8 @@ typedef struct {
 typedef enum {
   NO_SCENE = 0,
 
+  SCENE_SPLASH,
+
   SCENE_GAME
 
 } GameScene;
@@ -58,6 +60,8 @@ typedef struct {
   SamplePlayer *sfx_1_player;
   SamplePlayer *sfx_2_player; // Second player allows for layering sfx
   bool music_active;
+  void *splash_assets;
+  void *splash_userdata;
   void *game_assets;
   void *game_userdata;
 

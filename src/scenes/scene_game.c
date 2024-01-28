@@ -134,8 +134,6 @@ void init_game(GameContext *game, GameAssets *assets) {
   init_speech_bubble(pd, gsc, assets);
   init_jokes(pd, gsc, assets);
   init_misc(pd, gsc, assets);
-
-  reset_game(game, assets);
 }
 
 // Run once every game loop when scene is active. Do not change the function
@@ -165,7 +163,9 @@ GameScene tick_game(GameContext *game, GameAssets *assets,
   return NO_SCENE;
 }
 
-void enter_game(GameContext *game, GameAssets *assets) {}
+void enter_game(GameContext *game, GameAssets *assets) {
+  reset_game(game, assets);
+}
 
 void exit_game(GameContext *game, GameAssets *assets) {}
 

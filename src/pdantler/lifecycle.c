@@ -5,6 +5,61 @@
 
 #include "../common.h"
 #include "src/scenes/scene_game.h"
+#include "src/scenes/scene_splash.h"
+
+static void init_game_splash(GameContext *game, SplashAssets *assets) {
+  PlaydateAPI *pd = game->pd;
+  const char *outerr = NULL;
+
+  assets->splash_image = pd->graphics->loadBitmap("assets/splash.png", &outerr);
+  if (outerr) {
+    pdlogger_error("init_game_splash: error loading image splash. %s", outerr);
+  }
+
+  if (!assets->splash_image) {
+    pdlogger_error("init_game_splash: image splash loaded as null.");
+  }
+
+  assets->splash_sprite = pd->sprite->newSprite();
+
+  pd->sprite->setImage(assets->splash_sprite, assets->splash_image,
+                       kBitmapUnflipped);
+  pd->sprite->setZIndex(assets->splash_sprite, 1);
+
+  pd->sprite->moveTo(assets->splash_sprite, 200, 120);
+  pd->sprite->addSprite(assets->splash_sprite);
+  // Sprite are always invisible when created in init. They will be
+  // made visible during the scene enter/exit code
+  pd->sprite->setVisible(assets->splash_sprite, false);
+}
+
+static void lifecycle_enter_splash(GameContext *game, SplashAssets *assets) {
+  pdlogger_info("lifecycle.c: entering scene 'splash'");
+  PlaydateAPI *pd = game->pd;
+
+  pdlogger_info("lifecycle.c: .... showing sprite 'splash_sprite'");
+  pd->sprite->setVisible(assets->splash_sprite, true);
+
+  enter_splash(game, assets);
+}
+
+static void lifecycle_exit_splash(GameContext *game, SplashAssets *assets) {
+  pdlogger_info("lifecycle.c: exiting scene 'splash'");
+  PlaydateAPI *pd = game->pd;
+
+  pd->sprite->setVisible(assets->splash_sprite, false);
+  pdlogger_info("lifecycle.c: .... hiding sprite 'splash_sprite'");
+
+  exit_splash(game, assets);
+}
+
+static void lifecycle_pause_splash(GameContext *game, SplashAssets *assets) {
+  pause_splash(game, assets);
+}
+
+static void lifecycle_unpause_splash(GameContext *game, SplashAssets *assets) {
+  unpause_splash(game, assets);
+}
 
 static void init_game_game(GameContext *game, GameAssets *assets) {
   PlaydateAPI *pd = game->pd;
@@ -316,6 +371,9 @@ void pdantler_switch_to_scene(GameContext *game, GameScene scene) {
 
   switch (game->current_scene) {
 
+  case SCENE_SPLASH:
+    lifecycle_exit_splash(game, (SplashAssets *)game->splash_assets);
+    break;
   case SCENE_GAME:
     lifecycle_exit_game(game, (GameAssets *)game->game_assets);
     break;
@@ -328,6 +386,9 @@ void pdantler_switch_to_scene(GameContext *game, GameScene scene) {
 
   switch (game->current_scene) {
 
+  case SCENE_SPLASH:
+    lifecycle_enter_splash(game, (SplashAssets *)game->splash_assets);
+    break;
   case SCENE_GAME:
     lifecycle_enter_game(game, (GameAssets *)game->game_assets);
     break;
@@ -341,15 +402,19 @@ void lifecycle_init_game(GameContext *game) {
 
   init_fonts(game);
 
+  game->splash_assets = MLIB_CALLOC(1, sizeof(SplashAssets), game->mem_ctx);
+  init_game_splash(game, (SplashAssets *)game->splash_assets);
+
   game->game_assets = MLIB_CALLOC(1, sizeof(GameAssets), game->mem_ctx);
   init_game_game(game, (GameAssets *)game->game_assets);
 
   // This should change
   // to being on demand and having some kind of loading process
   // (which also handles the sprite loads from init_game)
+  init_splash(game, (SplashAssets *)game->splash_assets);
   init_game(game, (GameAssets *)game->game_assets);
 
   init_sounds(game);
 
-  pdantler_switch_to_scene(game, SCENE_GAME);
+  pdantler_switch_to_scene(game, SCENE_SPLASH);
 }
