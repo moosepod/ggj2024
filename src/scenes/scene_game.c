@@ -25,7 +25,7 @@
 #define MAX_VELOCITY 15
 
 // Uncomment to go into demo mode that doesn't randomize audience
-#define DEMO_MODE
+// y#define DEMO_MODE
 
 typedef enum {
   STATE_JOKE,

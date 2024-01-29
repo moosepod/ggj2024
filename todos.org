@@ -1,10 +1,13 @@
-* Setup
+* CLOSEOUT
+- [ ] Create itch page
+- [ ] Upload
+- [ ] Create GGJ page
+- [ ] Upload game to GGJ
+- [ ] Upload source to GGJ
+- [ ] Add GGJ screenshots
+- [ ] Add itch screenshots
+- [ ] Add github link
 
-- [ ] Look at diversifiers
-- [ ] Setup pdantler
-- [ ] Recruit art?
-- [ ] Recruit voice acting
-  
 * Prototype - loop
 
 - [X] Create progammer sprites for character, tomato, stage

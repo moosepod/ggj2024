@@ -3,5 +3,5 @@ author=Moosepod Software
 description=Survive the hecklers! Made for GGJ2024
 bundleID=com.moosepod.pecklers
 version=1.0
-buildNumber=1
+buildNumber=2
 imagePath=assets/launcher
