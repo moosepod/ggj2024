@@ -1,0 +1,13 @@
+* Heckler
+
+A game for the play.date for Global Game Jam 2024
+
+With the theme of "Make Me Laugh"
+
+* Game concept
+
+A comedian stands on a stage, making terrible jokes.
+
+People try to get him off stage, by throwing tomatoes or other objects, or grabbing him with a hook.
+
+There is voiced heckling and jokes.

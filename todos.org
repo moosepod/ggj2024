@@ -1,0 +1,91 @@
+* CLOSEOUT
+- [ ] Create itch page
+- [ ] Upload
+- [ ] Create GGJ page
+- [ ] Upload game to GGJ
+- [ ] Upload source to GGJ
+- [ ] Add GGJ screenshots
+- [ ] Add itch screenshots
+- [ ] Add github link
+
+* Prototype - loop
+
+- [X] Create progammer sprites for character, tomato, stage
+- [X] Move sprite with d-pad. Check bounds
+
+* First round  of work
+- [X] Shrink hitbox
+- [X] Store target when text opens
+- [X] Fix offsets for tomato launch  
+- [X] Fix speed
+- [X] Randomize
+- [X] Can't move while telling joke
+- [X] Add hook
+- [X] Hook should stop halfway through stage
+
+* Prioritize!
+- [X] Hook should pull bird
+- [X] Press A to play again message
+- [X] Figure out use of crank
+- [X] Add in new hook animation
+- [X] Move velocities to game context, increase as game goes on
+- [X] Bug where hook went way off edge of screen
+- [X] Add in hook with bird
+- [X] Add in bird talk animation
+- [X] Add in splash page
+- [ ] Add in sound
+
+* Final
+- [X] Add in credits
+- [X] Don't repeat jokes
+- [ ] Don't repeat sounds
+- [ ] More jokes
+- [ ] More heckles
+- [ ] Video
+ 
+* Nice to have
+- [ ] Splatter tomatoes
+- [ ] Can't move as soon as hook starts moving back
+- [ ] Never same joke twice in row
+- [ ] Sound
+- [ ] Reverse hook
+- [ ] Animate bird walk
+- [ ] Add a speech bubble triangle
+- [ ] Add mask for heckle speech bubble (not sure why this isn't working)
+
+* Other stuff
+- [ ] Add more jokes
+- [ ] Finalize image (get rid of bird 2, etc)
+- [ ] Timer?
+- [ ] Add a count-up timer
+- [ ] Add a get ready/win/loss state
+- [ ] Tomato "splat" on back
+- [ ] Remove FPS
+- [ ] Test voice sample
+    
+* Prototype - hook
+- [ ] Hook comes in from side of stage at different speeds. With "get off the stage" bubble
+- [ ] Hook comes in from side of stage at different speeds
+- [ ] Will need to be animated (add some kind of "animator" to pdantler?)
+
+
+
+* Brainstorming
+- [ ] Other things that can be thrown
+  
+* Art
+- [ ] Character, including animation
+- [ ] Tomato
+- [ ] Hook
+- [ ] Stage/audience
+
+* VO
+- [ ] Support subtitles too for accessibility
+- [ ] Brainstorm bad jokes
+- [ ] Brainstrom hecking
+- [ ] Record some vo 
+  
+* Closeout
+- [ ] Credits page
+- [ ] Splash page
+- [ ] Main icon

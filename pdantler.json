@@ -1,0 +1,248 @@
+{
+  "show_fps": false,
+  "fonts": [
+    {
+      "name": "main",
+      "path": "assets/fonts/font-pedallica"
+    }
+  ],
+  "metadata": {
+    "bibliography": {
+      "author": "Moosepod Software",
+      "bundle_id": "com.moosepod.pecklers",
+      "description": "Survive the hecklers! Made for GGJ2024",
+      "title": "Pecklers",
+      "version": "1.0",
+      "build_number": 2
+    },
+    "build": {
+      "additional_src": [],
+      "additional_test_src": []
+    },
+    "default_scene": "splash",
+    "log_level": "all"
+  },
+    "scenes": [
+	    {
+      "menus": [],
+      "name": "splash",
+      "sprites": [
+        {
+          "image": {
+            "path": "assets/sprites/splash.png"
+          },  
+          "name": "splash",
+          "position": {
+            "x": 200,
+            "y": 120  
+          },
+          "visible": true,
+          "zindex": 1
+        }
+      ]
+    },
+
+	    {
+      "menus": [],
+      "name": "credits",
+      "sprites": [
+        {
+          "image": {
+            "path": "assets/sprites/credits_w_logo.png"
+          },  
+          "name": "credits",
+          "position": {
+            "x": 200,
+            "y": 120  
+          },
+          "visible": true,
+          "zindex": 1
+        }
+      ]
+    },
+
+    {
+	"menus": [],
+	"samples": [{"name": "joke1","path":"assets/sounds/CrowJoke1.wav"},
+		    {"name": "joke2","path":"assets/sounds/CrowJoke2.wav"},
+		    {"name": "joke3","path":"assets/sounds/CrowJoke3.wav"},
+		    {"name": "joke4","path":"assets/sounds/CrowJoke4.wav"},
+		    {"name": "joke5","path":"assets/sounds/CrowJoke5.wav"},
+		    {"name": "heckle1","path":"assets/sounds/Peckle1.wav"},
+		    {"name": "heckle2","path":"assets/sounds/Peckle2.wav"},
+		    {"name": "heckle3","path":"assets/sounds/Peckle3.wav"},
+		    {"name": "heckle4","path":"assets/sounds/Peckle4.wav"},
+		    {"name": "heckle5","path":"assets/sounds/Peckle5.wav"},
+		    {"name": "heckle6","path":"assets/sounds/Peckle6.wav"},
+		    {"name": "heckle7","path":"assets/sounds/Peckle7.wav"},
+		    		    {"name": "heckle8","path":"assets/sounds/Peckle8.wav"}
+		    
+			 ],
+      "name": "game",
+      "targets": [
+        {
+          "name": "stage_center",
+          "rect": {
+            "x": 180,
+            "y": 90,
+            "width": 40,
+            "height": 20
+          }
+        },
+        {
+          "name": "stage_right",
+          "rect": {
+            "x": 450,
+            "y": 90,
+            "width": 40,
+            "height": 20
+          }
+        }
+      ],
+      "standalone_images": [
+        {
+          "name": "speech_bubble_base",
+          "image": {
+            "path": "assets/sprites/speech_bubble.png"
+          }
+        },
+        {
+          "image": {
+            "path": "assets/sprites/large_speech_bubble.png"
+          },
+          "name": "joke_bubble_base"
+        },
+        {
+          "image": {
+            "path": "assets/sprites/speech_bubble_mask.png"
+          },
+          "name": "speech_bubble_mask"
+        },
+        {
+          "image": {
+            "path": "assets/sprites/bird3.png"
+          },
+          "name": "bird_mouth_open"
+        }
+      ],
+      "sprites": [
+        {
+          "image": {
+            "path": "assets/sprites/background2.png"
+          },
+          "name": "background",
+          "position": {
+            "x": 200,
+            "y": 120
+          },
+          "visible": true,
+          "zindex": 1
+        },
+        {
+          "image": {
+            "path": "assets/sprites/bird2.png"
+          },
+          "name": "bird",
+          "position": {
+            "x": 200,
+            "y": 100
+          },
+          "visible": true,
+          "zindex": 5
+        },
+        {
+          "image": {
+            "path": "assets/sprites/foreground_birds.png"
+          },
+          "name": "audience",
+          "position": {
+            "x": 200,
+            "y": 120
+          },
+          "visible": true,
+          "zindex": 3
+        },
+        {
+          "image": {
+            "path": "assets/sprites/tomato.png"
+          },
+          "name": "tomato",
+          "position": {
+            "x": 50,
+            "y": 50
+          },
+          "visible": false,
+          "zindex": 5
+        },
+        {
+          "image": {
+            "path": "assets/sprites/hook.png"
+          },
+          "name": "hook",
+          "position": {
+            "x": 50,
+            "y": 50
+          },
+          "visible": false,
+          "zindex": 5
+        },
+        {
+          "image": {
+            "path": "assets/sprites/hooked_crow.png"
+          },
+          "name": "hooked_crow",
+          "position": {
+            "x": 50,
+            "y": 50
+          },
+          "visible": false,
+          "zindex": 5
+        },
+        {
+          "name": "speech_bubble",
+          "position": {
+            "x": 200,
+            "y": 120
+          },
+          "image": {
+            "size": {
+              "width": 144,
+              "height": 55
+            },
+            "background": "white"
+          },
+          "visible": false,
+          "zindex": 4
+        },
+        {
+          "name": "joke_bubble",
+          "position": {
+            "x": 198,
+            "y": 30
+          },
+          "image": {
+            "size": {
+              "width": 384,
+              "height": 38
+            },
+            "background": "white"
+          },
+          "visible": false,
+          "zindex": 2
+        },
+        {
+          "name": "start_text",
+          "position": {
+            "x": 200,
+            "y": 30
+          },
+          "image": {
+            "path": "assets/sprites/start_text.png"
+          },
+          "visible": false,
+          "zindex": 5
+        }
+      ]
+    }
+  ]
+}
