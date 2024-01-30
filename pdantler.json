@@ -12,8 +12,8 @@
       "bundle_id": "com.moosepod.pecklers",
       "description": "Survive the hecklers! Made for GGJ2024",
       "title": "Pecklers",
-      "version": "1.0",
-      "build_number": 2
+      "version": "1.0.1",
+      "build_number": 3
     },
     "build": {
       "additional_src": [],
@@ -94,7 +94,7 @@
           "rect": {
             "x": 450,
             "y": 90,
-            "width": 40,
+            "width": 50,
             "height": 20
           }
         }

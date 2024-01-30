@@ -428,7 +428,7 @@ static void init_game_game(GameContext *game, GameAssets *assets) {
       MLIBRECT_CREATE(180, 90, 40, 20);
 
   assets->targets[TARGET_GAME_STAGE_RIGHT].rect =
-      MLIBRECT_CREATE(450, 90, 40, 20);
+      MLIBRECT_CREATE(450, 90, 50, 20);
 }
 
 static void lifecycle_enter_game(GameContext *game, GameAssets *assets) {

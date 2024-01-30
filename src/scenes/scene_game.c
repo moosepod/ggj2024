@@ -25,7 +25,7 @@
 #define MAX_VELOCITY 15
 
 // Uncomment to go into demo mode that doesn't randomize audience
-// y#define DEMO_MODE
+//#define DEMO_MODE
 
 typedef enum {
   STATE_JOKE,
@@ -135,6 +135,10 @@ static void play_random_joke_sound(GameContext *game, GameAssets *assets);
 static void play_random_heckle_sound(GameContext *game, GameAssets *assets);
 
 static int rand_int_range(int min, int max) {
+  if (min == max) {
+    return min;
+  }
+
   return (rand() % (max - min)) + min;
 }
 
@@ -505,19 +509,18 @@ static void update_state(GameContext *game, GameAssets *assets) {
     if (pd->system->getElapsedTime() > gsc->change_state_time) {
 #ifdef DEMO_MODE
       gsc->audience_index = MLIB_CLAMP_TO_RANGE_MOD(gsc->audience_index + 1, 0,
-                                                    AUDIENCE_MEMBER_COUNT);
+                                                    AUDIENCE_MEMBER_COUNT - 1);
 #endif
 #ifndef DEMO_MODE
-      gsc->audience_index =
-          rand_int_range_skip(gsc->audience_index + 1, AUDIENCE_MEMBER_COUNT,
-                              gsc->last_audience_index);
+      gsc->audience_index = rand_int_range_skip(0, AUDIENCE_MEMBER_COUNT,
+                                                gsc->last_audience_index);
       gsc->last_audience_index = gsc->audience_index;
 #endif
       if (gsc->audience[gsc->audience_index].hook) {
         gsc->heckle_index = 0;
       } else {
         gsc->heckle_index =
-            rand_int_range_skip(1, HECKLE_COUNT, gsc->last_heckle_text_index);
+            rand_int_range_skip(0, HECKLE_COUNT, gsc->last_heckle_text_index);
         gsc->last_heckle_text_index = gsc->heckle_index;
       }
 
